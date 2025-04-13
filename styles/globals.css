@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Kaushan+Script&family=Sofia&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-gradient-to-br {
+  from: #1a202c; /* Dark Gray */
+  via: #2d3748; /* Medium Gray */
+  to: #000; /* Black */
+}
+
+.comic-neue {
+  font-family: "Comic Neue", cursive;
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+.scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.loader {
+  width: 16px;
+  height: 16px;
+  box-shadow:
+    0 30px,
+    0 -30px;
+  border-radius: 4px;
+  background: currentColor; /* Use currentColor for theme flexibility */
+  display: block;
+  margin: -50px auto 0;
+  position: relative;
+  color: #4a4a4a; /* A medium gray that contrasts on light and dark backgrounds */
+  transform: translateY(30px);
+  box-sizing: border-box;
+  animation: animloader 2s ease infinite;
+}
+
+.loader::after,
+.loader::before {
+  content: "";
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  box-shadow:
+    0 30px,
+    0 -30px;
+  border-radius: 4px;
+  background: currentColor; /* Keep background consistent with the main loader */
+  position: absolute;
+  left: 30px;
+  top: 0;
+  animation: animloader 2s 0.2s ease infinite;
+}
+
+.loader::before {
+  animation-delay: 0.4s;
+  left: 60px;
+}
+
+@keyframes animloader {
+  0% {
+    top: 0;
+    color: #4a4a4a; /* Matches the main color */
+  }
+  50% {
+    top: 30px;
+    color: rgba(74, 74, 74, 0.5); /* Slightly transparent for visual effect */
+  }
+  100% {
+    top: 0;
+    color: #4a4a4a; /* Matches the main color */
+  }
+}
