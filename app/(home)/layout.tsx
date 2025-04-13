@@ -1,11 +1,12 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Element } from 'react-scroll';
 
 import Footer from './_components/footer';
 import { Navbar } from './_components/ui/navbar';
 import SmoothScrollWrapper from './_components/ui/ScrollAnimation';
+import RLoader from './_components/ui/RLoader/loading';
 
 interface CommonLayoutProps {
   children: ReactNode;
@@ -28,6 +29,20 @@ export default function CommonLayout({
   myBlogs,
   contactMe,
 }: CommonLayoutProps) {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <RLoader />;
+  }
+
   return (
     <div className="space-y-5 pt-4 px-2">
       <Navbar />

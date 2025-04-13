@@ -10,10 +10,10 @@ import {
 
 export const siteConfig = {
   name: "Abu Talha's Portfolio",
-  ogImage: 'https://demo.jpg',
-  url: 'www.abutalhamdjobayer.com',
+  ogImage: 'https://i.ibb.co.com/yFgLxsCX/IMG-6807.jpg',
+  url: 'https://abutalha.vercel.app/',
   description:
-    'Junior Full Stack Developer specializing in modern web technologies.',
+    'Full Stack Developer with a passion for crafting high-performance web and mobile applications that drive user engagement and business growth. Proven track record in redesigning platforms, streamlining workflows, and solving complex problems to deliver scalable, user-friendly solutions. Skilled in React, Next.js, Node.js, and TypeScript, with a deep focus on real-time systems, clean architecture, and impactful digital transformation.',
   navItems: [
     {
       label: 'Home',
@@ -79,11 +79,11 @@ export const siteConfig = {
     },
   ],
   links: {
-    github: 'https://github.com/Md-Rijwan-Jannat',
-    linkedin: 'https://www.linkedin.com/in/md-rijwan-jannat47',
-    facebook: 'https://www.facebook.com/mdrijwanjannat',
-    twitter: 'https://x.com/JannatRijw51454',
-    discord: 'https://discord.com/channels/r.j.rijwan',
+    github: 'https://github.com/abujobayer0',
+    linkedin: 'https://www.linkedin.com/in/abutalhamdjobayer/',
+    facebook: 'https://www.facebook.com/abutalhazubayermunna',
+    twitter: 'https://x.com/abu_jobaye71370',
+    discord: 'https://discord.com/channels/atmjobayer',
     resume:
       'https://drive.google.com/file/d/1YIFQMCuGD8NCdpW4XuSH_01Ft9bPh_2V/view?usp=drive_link',
   },
