@@ -105,6 +105,9 @@ const Landing = () => {
 
   return (
     <>
+      <div className="w-full h-full">
+        <div className="absolute top-0 left-0 w-full h-[60px] bg-[#9333ea] blur-[150px] transform rotate-45" />
+      </div>
       <div className="flex items-center justify-center px-5 mt-10 md:mt-32 md:mb-16">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
           <ImageBox
@@ -116,7 +119,6 @@ const Landing = () => {
             name={'Abu Talha'}
             title="Full Stack Developer"
           />
-
           <motion.div
             ref={contentRef}
             className="w-full md:w-8/12"

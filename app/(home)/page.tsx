@@ -1,7 +1,7 @@
-import React from "react";
-export const dynamic = "force-dynamic";
+import React from 'react';
+export const dynamic = 'force-dynamic';
 
-import Landing from "./_components/landing";
+import Landing from './_components/landing';
 
 export default function Home() {
   return (
