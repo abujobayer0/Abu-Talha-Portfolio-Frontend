@@ -24,7 +24,6 @@ export const getAllExperiences = async () => {
   let fetchOptions = {};
 
   fetchOptions = {
-    cache: 'no-store',
     next: {
       tags: ['experiences'],
     },

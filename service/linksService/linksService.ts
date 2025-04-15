@@ -22,7 +22,6 @@ export const createLink = async (linkData: FieldValues) => {
 // Fetch all links
 export const getAllLinks = async () => {
   const fetchOptions = {
-    cache: 'no-store',
     next: {
       tags: ['links'],
     },
@@ -35,7 +34,6 @@ export const getAllLinks = async () => {
 // Fetch links by category
 export const getLink = async (id?: string) => {
   const fetchOptions = {
-    cache: 'no-store',
     next: {
       tags: ['links'],
     },

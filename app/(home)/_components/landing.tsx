@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useTypewriter, Cursor } from 'react-simple-typewriter';
 import $ from 'jquery';
+import { animate, stagger } from 'motion';
+import { splitText } from 'motion-plus';
 import { AiOutlineFundProjectionScreen } from 'react-icons/ai';
 
 import AnimatedButton from './ui/button';
@@ -29,8 +31,9 @@ const Landing = () => {
     delaySpeed: 2000,
   });
 
+  const contentRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    // jQuery for advanced image animations
     $('.profile-img').hover(
       function () {
         $(this).css({
@@ -39,9 +42,7 @@ const Landing = () => {
         });
       },
       function () {
-        $(this).css({
-          transform: 'scale(1)',
-        });
+        $(this).css({ transform: 'scale(1)' });
       }
     );
 
@@ -51,13 +52,61 @@ const Landing = () => {
         transition: 'box-shadow 0.3s ease-in-out',
       });
     });
+
+    // Animate h1 and paragraph after fonts load
+    document.fonts.ready.then(() => {
+      if (!contentRef.current) return;
+
+      const h1 = contentRef.current.querySelector('h1');
+      const p = contentRef.current.querySelector('p');
+
+      if (h1) {
+        const { words } = splitText(h1);
+
+        const whiteWords = ['Hello,', "I'm"];
+
+        words.forEach((wordEl) => {
+          const wordText = wordEl.textContent?.trim();
+          if (whiteWords.includes(wordText || '')) {
+            wordEl.style.color = '#ffffff';
+          } else {
+            wordEl.style.color = '#9333ea';
+          }
+        });
+
+        // Animate
+        animate(
+          words,
+          { opacity: [0, 1], y: [10, 0] },
+          {
+            type: 'spring',
+            duration: 2,
+            bounce: 0,
+            delay: stagger(0.04),
+          }
+        );
+      }
+
+      if (p) {
+        const { words } = splitText(p);
+        animate(
+          words,
+          { opacity: [0, 1], y: [8, 0] },
+          {
+            type: 'spring',
+            duration: 2,
+            bounce: 0,
+            delay: stagger(0.02),
+          }
+        );
+      }
+    });
   }, []);
 
   return (
     <>
-      <div className="flex items-center justify-center px-5 mt-10  md:mt-32 md:mb-16">
+      <div className="flex items-center justify-center px-5 mt-10 md:mt-32 md:mb-16">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
-          {/* Profile Image */}
           <ImageBox
             imageUrl={
               (!isLoading && aboutData?.data[0]?.image) ||
@@ -67,15 +116,16 @@ const Landing = () => {
             name={'Abu Talha'}
             title="Full Stack Developer"
           />
-          {/* Content Section */}
+
           <motion.div
-            animate={{ opacity: 1, y: 0 }}
+            ref={contentRef}
             className="w-full md:w-8/12"
             initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
           >
             <div className="text-center lg:text-left">
-              <h1 className="text-3xl md:text-5xl font-bold text-default-800">
+              <h1 className="text-3xl md:text-5xl font-bold">
                 Hello, I&apos;m{' '}
                 <span className="text-[#9333ea]">
                   {(!isLoading && aboutData?.data[0]?.me?.name) ||
@@ -83,22 +133,20 @@ const Landing = () => {
                 </span>
               </h1>
 
-              <h2 className="text-xl md:text-3xl text-default-700 mt-4">
+              <h2 className="text-xl md:text-3xl text-gray-400 mt-4">
                 A {text}
                 <Cursor cursorColor="#9333ea" />
               </h2>
-              <p className="text-default-700 mt-6 leading-relaxed">
+
+              <p className="text-gray-400 mt-6 leading-relaxed">
                 A Full Stack Developer from Bogura, Bangladesh, with a Diploma
-                in Computer Science from Naogaon Polytechnic Institute. I design
-                and develop dynamic websites, robust backend systems, engaging
-                frontend interfaces, scalable platforms, and intuitive mobile
-                apps. My focus is on delivering seamless, user-centric solutions
-                that drive impact and meet client goals. I thrive in
-                collaborative environments, bringing adaptability and a passion
-                for innovation to every project. Fluent in English and Bangla,
-                with conversational Hindi, I’m committed to creating
-                high-quality, modern solutions that empower businesses and
-                elevate user experiences worldwide.
+                in Computer Science from Naogaon Polytechnic Institute. I build
+                dynamic websites, scalable platforms, and intuitive mobile apps.
+                Passionate about clean design and efficient systems, I thrive in
+                collaborative environments and aim to deliver impactful,
+                user-focused solutions. Fluent in English and Bangla, with
+                conversational Hindi, I'm committed to crafting modern
+                experiences that elevate businesses worldwide.
               </p>
 
               <div className="mt-6 flex flex-wrap gap-4 justify-center lg:justify-start">
@@ -125,9 +173,6 @@ const Landing = () => {
             </div>
           </motion.div>
         </div>
-      </div>
-      <div className="w-full h-full">
-        <div className="absolute top-0 left-0 w-full h-[60px] bg-[#9333ea] blur-[150px] transform rotate-45" />
       </div>
     </>
   );

@@ -4,6 +4,7 @@ export interface TBlog {
   content: string;
   imageUrl: string;
   createdAt: string;
+  title?: string;
   updatedAt: string;
   __v: number;
 }

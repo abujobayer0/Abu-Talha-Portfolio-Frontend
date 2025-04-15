@@ -61,10 +61,13 @@ export const useGetAllSkills = () => {
 };
 
 // Get skills based on category
-export const useGetSkillsByCategory = (selectedKey: any) => {
+export const useGetSkillsByCategory = (
+  selectedKey: any,
+  enabled?: { enabled: boolean }
+) => {
   return useQuery({
     queryKey: ['get_skills_by_category', selectedKey || 'Frontend'],
     queryFn: () => getSkillsByCategory(selectedKey),
-    enabled: true,
+    enabled: enabled?.enabled,
   });
 };

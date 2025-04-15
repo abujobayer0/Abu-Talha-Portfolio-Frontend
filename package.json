@@ -34,7 +34,11 @@
     "@nextui-org/tooltip": "^2.0.41",
     "@react-aria/ssr": "3.9.4",
     "@react-aria/visually-hidden": "3.8.12",
+    "@react-three/drei": "^10.0.6",
+    "@react-three/fiber": "^9.1.2",
     "@tanstack/react-query": "^5.59.15",
+    "@types/three": "^0.175.0",
+    "animejs": "^4.0.1",
     "axios": "^1.7.7",
     "clsx": "2.1.1",
     "date-fns": "^4.1.0",
@@ -46,6 +50,8 @@
     "jwt-decode": "^4.0.0",
     "lucide": "^0.453.0",
     "lucide-react": "^0.453.0",
+    "motion": "^12.7.3",
+    "motion-plus": "^0.1.6",
     "next": "14.2.4",
     "next-cloudinary": "^6.16.0",
     "next-themes": "^0.2.1",
@@ -59,7 +65,8 @@
     "react-scroll": "^1.9.0",
     "react-simple-typewriter": "^5.0.1",
     "sonner": "^1.5.0",
-    "swiper": "^11.1.14"
+    "swiper": "^11.1.14",
+    "three": "^0.175.0"
   },
   "devDependencies": {
     "@emailjs/browser": "^4.4.1",

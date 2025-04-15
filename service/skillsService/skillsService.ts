@@ -1,18 +1,18 @@
-"use server";
+'use server';
 
-import { revalidateTag } from "next/cache";
-import { FieldValues } from "react-hook-form";
+import { revalidateTag } from 'next/cache';
+import { FieldValues } from 'react-hook-form';
 
-import { SkillCategory } from "@/constants/skills.constants";
-import axiosInstance from "@/lib/axiosInstance";
-import { TUpdateData } from "@/types";
+import { SkillCategory } from '@/constants/skills.constants';
+import axiosInstance from '@/lib/axiosInstance';
+import { TUpdateData } from '@/types';
 
 // Create skill
 export const createSkill = async (skillData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post("/skills", skillData);
+    const { data } = await axiosInstance.post('/skills', skillData);
 
-    revalidateTag("skills");
+    revalidateTag('skills');
 
     return data;
   } catch (error: any) {
@@ -25,13 +25,13 @@ export const getAllSkills = async () => {
   let fetchOptions = {};
 
   fetchOptions = {
-    cache: "no-store",
+    cache: 'no-store',
     next: {
-      tags: ["skills"],
+      tags: ['skills'],
     },
   };
 
-  const { data } = await axiosInstance.get("/skills", { fetchOptions });
+  const { data } = await axiosInstance.get('/skills', { fetchOptions });
 
   return data;
 };
@@ -41,13 +41,13 @@ export const getSkillsByCategory = async (category?: SkillCategory) => {
   let fetchOptions = {};
 
   fetchOptions = {
-    cache: "no-store",
+    cache: 'no-store',
     next: {
-      tags: ["skills"],
+      tags: ['skills'],
     },
   };
 
-  const { data } = await axiosInstance.get("/skills", {
+  const { data } = await axiosInstance.get('/skills', {
     params: { category },
     fetchOptions,
   });
@@ -60,10 +60,10 @@ export const editSkill = async (skillData: TUpdateData) => {
   try {
     const { data } = await axiosInstance.patch(
       `/skills/${skillData?.id}`,
-      skillData?.data,
+      skillData?.data
     );
 
-    revalidateTag("skills");
+    revalidateTag('skills');
 
     return data;
   } catch (error: any) {
@@ -76,7 +76,7 @@ export const deleteSkill = async (id: string) => {
   try {
     const { data } = await axiosInstance.delete(`/skills/${id}`);
 
-    revalidateTag("skills");
+    revalidateTag('skills');
 
     return data;
   } catch (error: any) {

@@ -22,7 +22,6 @@ export const createProject = async (projectData: FieldValues) => {
 // Fetch all project
 export const getAllProjects = async (query?: Record<string, any>) => {
   const fetchOptions = {
-    cache: 'no-store',
     next: {
       tags: ['projects'],
     },
