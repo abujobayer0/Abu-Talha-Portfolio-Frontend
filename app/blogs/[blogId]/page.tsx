@@ -1,9 +1,43 @@
 import { BlogCard } from '@/app/(home)/_components/module/blogs/blogCard';
 import { Navbar } from '@/app/(home)/_components/ui/navbar';
-import { Title } from '@/app/(home)/_components/ui/title';
 import { getSingleBlog } from '@/service/blogService/blogService';
 import { TBlog } from '@/types';
-import { BackHeader } from '@/app/(home)/_components/ui/backHeader'; // create this client component
+import { BackHeader } from '@/app/(home)/_components/ui/backHeader';
+import { Metadata } from 'next';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { blogId: string };
+}): Promise<Metadata> {
+  const data = await getSingleBlog(params.blogId);
+  const blog = data?.data as TBlog;
+
+  return {
+    title: blog?.title,
+    description: blog?.content?.slice(0, 160),
+    openGraph: {
+      title: blog?.title,
+      description: blog?.content?.slice(0, 160),
+      type: 'article',
+      url: `https://abutalha.vercel.app/blog/${params.blogId}`,
+      images: [
+        {
+          url: blog?.imageUrl,
+          width: 1200,
+          height: 630,
+          alt: blog?.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: blog?.title,
+      description: blog?.content?.slice(0, 160),
+      images: [blog?.imageUrl],
+    },
+  };
+}
 
 export default async function BlogDetailsPage({
   params,

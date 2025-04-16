@@ -51,9 +51,7 @@ const BlogCard = ({ blog, index = 0 }: BlogCardProps) => {
       custom={index}
       viewport={{ once: true }}
       variants={cardContainerVariants}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.97 }}
-      className="relative"
+      className="relative cursor-pointer"
     >
       <div className="group relative bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl overflow-hidden border border-purple-100 dark:border-purple-900 shadow-lg hover:shadow-purple-300/30 hover:ring-2 hover:ring-purple-400/50 transition-all duration-300">
         {/* Animated glow background on hover */}
