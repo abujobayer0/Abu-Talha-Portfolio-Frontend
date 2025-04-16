@@ -1,11 +1,11 @@
 'use client';
 
 import { ReactNode, useEffect, useState } from 'react';
-import { Element } from 'react-scroll';
+import { Element, Events, scrollSpy, scroller } from 'react-scroll';
+import { LazyMotion, domAnimation, m } from 'framer-motion';
 
 import Footer from './_components/footer';
 import { Navbar } from './_components/ui/navbar';
-import SmoothScrollWrapper from './_components/ui/ScrollAnimation';
 import RLoader from './_components/ui/RLoader/loading';
 
 interface CommonLayoutProps {
@@ -19,6 +19,19 @@ interface CommonLayoutProps {
   contactMe: ReactNode;
 }
 
+// Animation variants for section entrance
+const sectionVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: 'easeOut',
+    },
+  },
+};
+
 export default function CommonLayout({
   children,
   aboutMe,
@@ -30,7 +43,9 @@ export default function CommonLayout({
   contactMe,
 }: CommonLayoutProps) {
   const [loading, setLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState('home');
 
+  // Handle initial loading state
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -39,56 +54,146 @@ export default function CommonLayout({
     return () => clearTimeout(timer);
   }, []);
 
+  // Setup scroll spy and event listeners with optimized settings
+  useEffect(() => {
+    // More performant scroll handling
+    const handleScroll = () => {
+      // Only update scrollSpy when needed
+      scrollSpy.update();
+    };
+
+    // Configure scroll options for the entire app
+    Events.scrollEvent.register('begin', (to) => {
+      setActiveSection(to);
+    });
+
+    Events.scrollEvent.register('end', (to) => {
+      setActiveSection(to);
+    });
+
+    // Initialize scrollSpy
+    scrollSpy.update();
+
+    // Add throttled scroll listener for better performance
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Clean up events when component unmounts
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      Events.scrollEvent.remove('begin');
+      Events.scrollEvent.remove('end');
+    };
+  }, []);
+
   if (loading) {
     return <RLoader />;
   }
 
   return (
-    <div className="space-y-5 pt-4 px-2">
-      <Navbar />
+    <LazyMotion features={domAnimation}>
+      <div className="space-y-5 pt-4 px-2">
+        <Navbar activeSection={activeSection} />
 
-      <SmoothScrollWrapper />
+        {/* Main content with appropriate spacing */}
+        <div className="space-y-20 md:space-y-28">
+          <Element name="home" className="pt-4 min-h-[80vh] flex items-center">
+            <m.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={sectionVariants}
+              className="w-full"
+            >
+              {children}
+            </m.div>
+          </Element>
 
-      {/* Main content */}
-      <Element name="home">
-        <div>{children}</div>
-      </Element>
+          {/* Skills section */}
+          <Element name="skills" className="pt-16 min-h-[80vh]">
+            <m.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={sectionVariants}
+            >
+              {skills}
+            </m.div>
+          </Element>
 
-      {/* Skills section with animation */}
-      <Element name="skills">
-        <div>{skills}</div>
-      </Element>
+          {/* Experience section */}
+          <Element name="experience" className="pt-16 min-h-[80vh]">
+            <m.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={sectionVariants}
+            >
+              {experience}
+            </m.div>
+          </Element>
 
-      {/* Experience section with animation */}
-      <Element name="experience">
-        <div>{experience}</div>
-      </Element>
+          {/* About section */}
+          <Element name="about" className="pt-16 min-h-[80vh]">
+            <m.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={sectionVariants}
+            >
+              {aboutMe}
+            </m.div>
+          </Element>
 
-      {/* About section with animation */}
-      <Element name="about">
-        <div>{aboutMe}</div>
-      </Element>
+          {/* Projects section */}
+          <Element name="projects" className="pt-16 min-h-[80vh]">
+            <m.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={sectionVariants}
+            >
+              {projects}
+            </m.div>
+          </Element>
 
-      {/* Education section with animation */}
-      {/* <Element name="education">
-        <div>{education}</div>
-      </Element> */}
+          {/* Blogs section */}
+          <Element name="blogs" className="pt-16 min-h-[80vh]">
+            <m.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={sectionVariants}
+            >
+              {myBlogs}
+            </m.div>
+          </Element>
 
-      {/* Projects section with animation */}
-      <Element name="projects">
-        <div>{projects}</div>
-      </Element>
+          {/* Contact section */}
+          <Element name="contact" className="pt-16 min-h-[80vh]">
+            <m.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={sectionVariants}
+            >
+              {contactMe}
+            </m.div>
+          </Element>
+        </div>
 
-      {/* Blogs section with animation */}
-      <Element name="blogs">
-        <div>{myBlogs}</div>
-      </Element>
-
-      {/* Contact section with animation */}
-      <Element name="contact">
-        <div>{contactMe}</div>
-      </Element>
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </LazyMotion>
   );
 }

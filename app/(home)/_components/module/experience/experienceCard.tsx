@@ -25,7 +25,7 @@ const ClientExperience: React.FC<TExperiencesProps> = ({ experiences }) => {
   return (
     <div
       ref={containerRef}
-      className="relative flex flex-col max-w-3xl mx-auto"
+      className="relative flex flex-col py-12 max-w-3xl mx-auto"
     >
       {/* Timeline line */}
       <motion.div
@@ -53,7 +53,7 @@ const ClientExperience: React.FC<TExperiencesProps> = ({ experiences }) => {
               transition={{ delay: index * 0.2, duration: 0.5 }}
               className="absolute left-6 top-6 size-12 z-20"
             >
-              <div className="absolute inset-0 bg-white dark:bg-gray-900 rounded-full shadow-lg shadow-purple-500/20"></div>
+              <div className="absolute inset-0 bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-full shadow-lg shadow-purple-500/20"></div>
               <div className="absolute inset-0.5 bg-gradient-to-br from-purple-300 to-purple-500 dark:from-purple-500 dark:to-purple-700 rounded-full p-0.5">
                 <div className="w-full h-full rounded-full bg-white dark:bg-gray-900 p-1 flex items-center justify-center">
                   <Image
@@ -74,7 +74,7 @@ const ClientExperience: React.FC<TExperiencesProps> = ({ experiences }) => {
               transition={{ duration: 0.5, delay: index * 0.3 }}
               whileHover={{ scale: 1.02, y: -5 }}
               whileTap={{ scale: 0.98 }}
-              className="relative group bg-white/50 dark:bg-gray-800/50 backdrop-blur-md rounded-2xl px-6 py-5 border border-purple-100 dark:border-purple-900 shadow-lg overflow-hidden hover:shadow-purple-300/50 transition-all duration-300"
+              className="relative group bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl px-6 py-5 border border-purple-100 dark:border-purple-900 shadow-lg overflow-hidden hover:shadow-purple-300/50 transition-all duration-300"
             >
               {/* Subtle glow effect */}
               <motion.div

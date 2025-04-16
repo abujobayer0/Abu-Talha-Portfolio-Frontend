@@ -192,7 +192,7 @@ const Contact: React.FC = () => {
   );
 
   return (
-    <section id="contact" className="py-20 relative overflow-hidden">
+    <section id="contact" className="py-12 relative overflow-hidden">
       <GridBackgrounds />
 
       <div className="container mx-auto px-4 relative z-10">
@@ -220,7 +220,7 @@ const Contact: React.FC = () => {
           >
             <form
               ref={form}
-              className="w-full flex flex-col gap-6 bg-white/5 backdrop-blur-lg border border-gray-200/10 rounded-3xl p-8 shadow-2xl"
+              className="w-full flex flex-col gap-6  backdrop-blur-lg border border-gray-200/10 rounded-3xl p-8 shadow-2xl"
               onSubmit={handleSend}
             >
               <h2 className="text-2xl font-bold text-white mb-2">

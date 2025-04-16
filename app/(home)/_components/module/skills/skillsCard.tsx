@@ -7,11 +7,13 @@ import { TSkill } from '@/types';
 
 interface TSkillCardProps {
   skill: TSkill;
+  variant?: 'vertical' | 'horizontal';
 }
 
-export default function SkillsCard({ skill }: TSkillCardProps) {
-  console.log(skill);
-
+export default function SkillsCard({
+  skill,
+  variant = 'vertical',
+}: TSkillCardProps) {
   // Level indicator configuration
   const getLevelColor = (level: string) => {
     switch (level) {
@@ -43,14 +45,18 @@ export default function SkillsCard({ skill }: TSkillCardProps) {
     }
   };
 
+  const isHorizontal = variant === 'horizontal';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.05 }}
+      whileHover={{ scale: isHorizontal ? 1.02 : 1.05 }}
       whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="relative group bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl px-4 py-3 flex flex-col border border-purple-100 dark:border-purple-900 shadow-lg overflow-hidden hover:shadow-purple-300/30 hover:ring-2 hover:ring-purple-400/50 transition-all duration-300"
+      className={`relative group bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl px-4 py-3 ${
+        isHorizontal ? 'flex flex-row items-center' : 'flex flex-col'
+      } border border-purple-100 dark:border-purple-900 shadow-lg overflow-hidden hover:shadow-purple-300/30 hover:ring-2 hover:ring-purple-400/50 transition-all duration-300`}
     >
       <motion.div
         className="absolute inset-0 rounded-2xl z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -61,7 +67,9 @@ export default function SkillsCard({ skill }: TSkillCardProps) {
       />
 
       {/* Top section with icon and name */}
-      <div className="flex items-center gap-4 mb-3">
+      <div
+        className={`flex items-center gap-4 ${isHorizontal ? 'mr-4 flex-shrink-0' : 'mb-3'}`}
+      >
         <div className="relative z-10 flex items-center justify-center rounded-full p-1 bg-gradient-to-br from-purple-200 to-purple-400/40 shadow-inner shadow-purple-500/20">
           <Image
             alt={skill.name}
@@ -72,13 +80,22 @@ export default function SkillsCard({ skill }: TSkillCardProps) {
           />
         </div>
 
+        {isHorizontal && (
+          <h3 className="text-sm md:text-base font-medium text-purple-800 dark:text-purple-200 z-10">
+            {skill.name}
+          </h3>
+        )}
+      </div>
+
+      {/* Middle section - only shown in vertical layout */}
+      {!isHorizontal && (
         <h3 className="text-sm md:text-base font-medium text-purple-800 dark:text-purple-200 z-10">
           {skill.name}
         </h3>
-      </div>
+      )}
 
       {/* Level indicator section */}
-      <div className="w-full mt-1 z-10">
+      <div className={`z-10 ${isHorizontal ? 'flex-grow' : 'w-full mt-1'}`}>
         <div className="flex justify-between items-center mb-1">
           <motion.span
             className="text-xs font-medium text-purple-700 dark:text-purple-300 opacity-80"
@@ -126,6 +143,19 @@ export default function SkillsCard({ skill }: TSkillCardProps) {
           )}
         </div>
       </div>
+
+      {/* Additional info for horizontal variant */}
+      {isHorizontal && (
+        <div className="flex flex-shrink-0 items-center ml-4 pl-4 border-l border-purple-100/50 dark:border-purple-900/30">
+          <motion.div
+            className="bg-purple-100/80 dark:bg-purple-900/30 px-3 py-1 rounded-full text-xs font-medium text-purple-700 dark:text-purple-300"
+            whileHover={{ scale: 1.1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+          >
+            {skill.category}
+          </motion.div>
+        </div>
+      )}
     </motion.div>
   );
 }

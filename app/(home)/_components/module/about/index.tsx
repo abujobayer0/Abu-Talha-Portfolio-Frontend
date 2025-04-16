@@ -20,7 +20,7 @@ export default function About({ about, projects, skills, blogs }: TAboutProps) {
   const { data: link } = useGetLink('67bb2077af9ba724ceece4ec');
 
   return (
-    <section className="w-full py-16 ">
+    <section className="w-full py-12">
       <div className="container mx-auto px-4 relative">
         <GridBackgrounds />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -37,6 +37,7 @@ export default function About({ about, projects, skills, blogs }: TAboutProps) {
                   src={about.image}
                   alt={about.title || 'Profile Image'}
                   fill
+                  style={{ filter: 'brightness(80%)' }}
                   className="object-cover hover:scale-105 transition-transform duration-500"
                 />
               )}
