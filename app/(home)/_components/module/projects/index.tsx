@@ -37,7 +37,7 @@ export default function Projects({ projects }: ProjectsProps) {
   }, [controls, inView]);
 
   return (
-    <div className="py-16">
+    <div className="py-16 relative">
       <div
         ref={ref}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-6"
