@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { Title } from '../../ui/title';
 
 import { TBlog } from '@/types';
+import EditBlogModal from '@/app/(admin)/_components/modal/editBlogModal';
+import DeleteBlogModal from '@/app/(admin)/_components/modal/deleteBlogModal';
 
 interface TBlogsProps {
   blogs: TBlog[];
@@ -32,7 +34,7 @@ export default function Blogs({ blogs }: TBlogsProps) {
       <Title title1="Blogs" title2="My Blogs" />
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-10">
         {blogs.map((blog, index) => (
-          <BlogCard key={blog._id} index={index} blog={blog} />
+          <CommonBlogCard key={blog._id} index={index} blog={blog} />
         ))}
       </div>
     </div>
@@ -42,8 +44,13 @@ export default function Blogs({ blogs }: TBlogsProps) {
 interface BlogCardProps {
   blog: TBlog;
   index?: number;
+  isEditable?: boolean;
 }
-const BlogCard = ({ blog, index = 0 }: BlogCardProps) => {
+export const CommonBlogCard = ({
+  blog,
+  isEditable,
+  index = 0,
+}: BlogCardProps) => {
   return (
     <motion.div
       initial="hidden"
@@ -82,6 +89,15 @@ const BlogCard = ({ blog, index = 0 }: BlogCardProps) => {
                 {new Date(blog.createdAt).toLocaleDateString()}
               </p>
             </div>
+            {isEditable && (
+              <div
+                className="flex space-x-3"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <EditBlogModal blog={blog} />
+                <DeleteBlogModal blog={blog} />
+              </div>
+            )}
           </div>
 
           {/* Blog image */}

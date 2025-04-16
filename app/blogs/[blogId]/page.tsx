@@ -51,7 +51,7 @@ export default async function BlogDetailsPage({
     <div className="bg-background min-h-screen">
       <Navbar />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         <BackHeader />
         <div>
           <BlogCard blog={blog} />

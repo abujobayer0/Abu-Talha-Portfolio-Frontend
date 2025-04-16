@@ -12,111 +12,105 @@ export default function SidebarMain({ children }: { children: ReactNode }) {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const pathname = usePathname();
 
-  // Monitor screen size
   useEffect(() => {
     const handleResize = () => {
       setIsLargeScreen(window.innerWidth >= 1024);
     };
 
-    // Initial check
     handleResize();
     window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Sidebar animation variants
   const sidebarVariants = {
     expanded: {
-      width: '270px',
+      width: 260,
       transition: { duration: 0.4, ease: 'easeInOut' },
     },
     collapsed: {
-      width: '50px',
+      width: 72,
       transition: { duration: 0.4, ease: 'easeInOut' },
     },
   };
 
-  // Menu items staggered animation
   const menuItemVariants = {
-    hidden: {
-      opacity: 0,
-      x: -20,
-    },
-    visible: (index: number) => ({
+    hidden: { opacity: 0, x: -15 },
+    visible: (i: number) => ({
       opacity: 1,
       x: 0,
-      transition: {
-        delay: index * 0.1, // delay each item a bit more for stagger effect
-        duration: 0.3,
-        ease: 'easeInOut',
-      },
+      transition: { delay: i * 0.05, duration: 0.3 },
     }),
   };
 
-  // Link text animation
   const linkTextVariants = {
-    expanded: {
-      opacity: 1,
-      display: 'block',
-      transition: { delay: 0.2 },
-    },
-    collapsed: {
-      opacity: 0,
-      display: 'none',
-      transition: { delay: 0.2 },
-    },
+    expanded: { opacity: 1, display: 'inline' },
+    collapsed: { opacity: 0, transitionEnd: { display: 'none' } },
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen bg-default-50">
       {/* Sidebar */}
       <motion.aside
         animate={isLargeScreen ? 'expanded' : 'collapsed'}
-        className="text-default-800 transition-all duration-300 ease-in-out h-screen lg:static flex flex-col items-center z-10 bg-default-50 fixed"
         variants={sidebarVariants}
+        className="fixed top-0 left-0 h-full bg-white border-r border-gray-200 dark:bg-zinc-900 dark:border-zinc-700 shadow-sm z-20 flex flex-col justify-between py-6"
       >
-        {/* Sidebar Logo */}
-        <Link
-          href={'/'}
-          className="flex items-start text-lg font-semibold py-4 md:p-4 cursor-pointer"
-        >
-          <Logo />
-        </Link>
-
-        {/* Sidebar Navigation */}
-        <motion.nav animate="visible" className="space-y-4" initial="hidden">
-          {siteConfig.dashboardMenuItems.map((route, index) => (
-            <motion.div
-              key={index}
-              className="p-2"
-              custom={index}
-              variants={menuItemVariants}
+        <div className="flex flex-col items-center gap-8">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 px-4">
+            <Logo />
+            <motion.span
+              className="text-lg font-semibold text-zinc-800 dark:text-white hidden lg:inline"
+              animate={isLargeScreen ? 'expanded' : 'collapsed'}
+              variants={linkTextVariants}
             >
-              <Link
-                className={`flex items-center space-x-2 p-2 md:py-2 lg:px-4 rounded-md hover:bg-warning-400 hover:text-default-100 transition whitespace-nowrap ${route.path === pathname ? 'bg-warning-400 text-default-50' : ''}`}
-                href={route.path}
-              >
-                <route.icon className="size-4" />
-                <motion.span
-                  animate={isLargeScreen ? 'expanded' : 'collapsed'}
-                  className="text-sm lg:block hidden"
-                  variants={linkTextVariants}
+              Siyte
+            </motion.span>
+          </Link>
+
+          {/* Nav */}
+          <motion.nav
+            className="flex flex-col w-full items-center lg:items-start gap-2 mt-6 px-2"
+            initial="hidden"
+            animate="visible"
+          >
+            {siteConfig.dashboardMenuItems.map((item, i) => {
+              const isActive = pathname === item.path;
+              return (
+                <motion.div
+                  key={i}
+                  variants={menuItemVariants}
+                  custom={i}
+                  className="w-full"
                 >
-                  {route.name}
-                </motion.span>
-              </Link>
-            </motion.div>
-          ))}
-        </motion.nav>
+                  <Link
+                    href={item.path}
+                    className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-colors duration-300 group ${
+                      isActive
+                        ? 'bg-warning-500 text-white'
+                        : 'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+                    }`}
+                  >
+                    <item.icon className="w-5 h-5 shrink-0" />
+                    <motion.span
+                      className="text-sm font-medium"
+                      animate={isLargeScreen ? 'expanded' : 'collapsed'}
+                      variants={linkTextVariants}
+                    >
+                      {item.name}
+                    </motion.span>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </motion.nav>
+        </div>
       </motion.aside>
 
-      {/* Main Content */}
-      <motion.div className="flex-1 p-6 h-screen overflow-y-scroll scrollbar-hide ml-8 lg:ml-0">
+      {/* Content */}
+      <main className="flex-1 ml-[72px] lg:ml-[260px] p-6 overflow-y-auto scrollbar-hide">
         {children}
-      </motion.div>
+      </main>
     </div>
   );
 }
