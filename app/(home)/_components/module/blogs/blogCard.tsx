@@ -10,35 +10,47 @@ interface BlogCardProps {
 
 export const BlogCard = ({ blog }: BlogCardProps) => {
   return (
-    <div className="border border-default-200 bg-default-50 rounded-lg p-6 max-w-4xl mx-auto">
-      {/* Author information */}
-      <div className="flex gap-3 items-center">
-        <Avatar size="md" src={blog.author.image} />
-        <div className="flex flex-col items-start">
-          <h3 className="text-lg font-bold">{blog.author.name}</h3>
-          <p className="text-sm text-default-500">
-            Posted on: {new Date(blog.createdAt).toLocaleDateString()}
-          </p>
+    <article className="max-w-4xl mx-auto  dark:border-warning-300 rounded-2xl shadow-md overflow-hidden transition hover:shadow-lg hover:border-warning-500 p-6 md:p-10">
+      {/* Author Info */}
+      <div className="flex items-center gap-4 mb-6">
+        <Avatar
+          size="lg"
+          src={blog.author.image}
+          className="ring-2 ring-warning-500"
+        />
+        <div className="flex flex-col">
+          <span className="text-base font-semibold text-foreground  dark:text-warning-50">
+            {blog.author.name}
+          </span>
+          <time className="text-sm text-default-500 dark:text-warning-400">
+            {new Date(blog.createdAt).toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </time>
         </div>
       </div>
 
-      {/* Blog image */}
-      <div className="my-3">
-        <Image
-          alt="Blog image"
-          className="w-full h-auto rounded-lg z-[99999]"
-          height={500}
-          src={blog.imageUrl}
-          style={{ objectFit: 'cover' }}
-          width={500}
-        />
-      </div>
+      {/* Blog Image */}
+      {blog.imageUrl && (
+        <div className="relative w-full h-[300px] md:h-[400px] mb-6 rounded-xl overflow-hidden">
+          <Image
+            src={blog.imageUrl}
+            alt="Blog image"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-xl"
+            priority
+          />
+        </div>
+      )}
 
-      {/* Full HTML Content */}
-      <div
+      {/* Blog Content */}
+      <section
+        className="prose dark:prose-invert max-w-none text-lg leading-relaxed text-default-800 dark:text-warning-100"
         dangerouslySetInnerHTML={{ __html: blog.content }}
-        className="blog-content my-4"
       />
-    </div>
+    </article>
   );
 };

@@ -48,7 +48,8 @@ const ClientExperience: React.FC<TExperiencesProps> = ({ experiences }) => {
               }}
             />
 
-            <div className="relative z-10 flex flex-col gap-2">
+            <div className="relative z-10 flex flex-col gap-4">
+              {/* Header */}
               <div className="flex justify-between items-center gap-4">
                 <div className="flex items-center gap-3">
                   <div className="rounded-full bg-gradient-to-br from-purple-200 to-purple-400/40 p-1 shadow-inner shadow-purple-500/20">
@@ -80,21 +81,37 @@ const ClientExperience: React.FC<TExperiencesProps> = ({ experiences }) => {
                 </div>
               </div>
 
-              <p className="text-xs text-purple-900 dark:text-purple-100 mt-2">
-                {isExpanded || !isLong
-                  ? exp.description
-                  : `${exp.description.slice(0, MAX_CHAR)}...`}
-              </p>
+              {/* Description */}
+              <div className="text-xs text-purple-900 dark:text-purple-100 mt-2 space-y-2">
+                {isExpanded || !isLong ? (
+                  exp.description.split('\n').map((line, i) => (
+                    <p key={i} className="flex items-start gap-2">
+                      <span>•</span>
+                      {line}
+                    </p>
+                  ))
+                ) : (
+                  <>
+                    {exp.description.slice(0, MAX_CHAR)}...
+                    <button
+                      className="text-[10px] text-purple-600 hover:underline ml-1"
+                      onClick={() => toggleExpand(exp._id)}
+                    >
+                      See more
+                    </button>
+                  </>
+                )}
+                {isLong && isExpanded && (
+                  <button
+                    className="text-[10px] text-purple-600 hover:underline mt-1"
+                    onClick={() => toggleExpand(exp._id)}
+                  >
+                    See less
+                  </button>
+                )}
+              </div>
 
-              {isLong && (
-                <button
-                  className="text-[10px] text-purple-600 hover:underline mt-1"
-                  onClick={() => toggleExpand(exp._id)}
-                >
-                  {isExpanded ? 'See less' : 'See more'}
-                </button>
-              )}
-
+              {/* Technologies */}
               <div className="flex flex-wrap items-start gap-2 mt-3">
                 {exp.technologies.map((tech) => (
                   <div
