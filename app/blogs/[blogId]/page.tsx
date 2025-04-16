@@ -19,9 +19,7 @@ export default async function BlogDetailsPage({
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         <BackHeader />
-        <Title title1="" title2={blog?.title || 'hello'} />
-
-        <div className="my-8">
+        <div>
           <BlogCard blog={blog} />
         </div>
       </div>

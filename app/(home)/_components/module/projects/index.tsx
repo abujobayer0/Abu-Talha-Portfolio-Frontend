@@ -84,13 +84,13 @@ export default function Projects({ projects }: ProjectsProps) {
                     {project.technologies.slice(0, 3).map((tech) => (
                       <span
                         key={tech._id}
-                        className="rounded-full bg-purple-100/10 backdrop-blur-md px-3 py-1 text-[11px] font-medium text-purple-100 border border-purple-400/30 hover:bg-purple-400/20 transition-all"
+                        className="rounded-full bg-purple-100/50 backdrop-blur-md px-3 py-1 text-[11px] font-medium text-purple-800 border border-purple-400/30 hover:bg-purple-400/20 transition-all"
                       >
                         {tech.name}
                       </span>
                     ))}
                     {project.technologies.length > 3 && (
-                      <span className="rounded-full bg-purple-100/10 backdrop-blur-md px-3 py-1 text-[11px] font-medium text-purple-100 border border-purple-400/30">
+                      <span className="rounded-full bg-purple-100/10 backdrop-blur-md px-3 py-1 text-[11px] font-medium text-purple-800 border border-purple-400/30">
                         +{project.technologies.length - 3}
                       </span>
                     )}
