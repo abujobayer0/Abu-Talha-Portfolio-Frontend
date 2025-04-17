@@ -1,7 +1,7 @@
 import React from 'react';
 
-import RLoader from './(home)/_components/ui/RLoader/loading';
+import Loader from './(home)/_components/ui/RLoader/loader';
 
 export default function loading() {
-  return <RLoader />;
+  return <Loader />;
 }

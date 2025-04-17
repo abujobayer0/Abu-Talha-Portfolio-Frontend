@@ -97,12 +97,13 @@ export default function Projects({ projects }: ProjectsProps) {
 
                 {/* Project content */}
                 <div className="p-5 z-10 relative">
-                  <h3 className="font-bold text-purple-800 dark:text-purple-200 text-lg mb-2">
+                  <h3 className="font-bold text-purple-800 dark:text-purple-200 text-lg mb-2  line-clamp-1">
                     {project.title}
                   </h3>
-                  <p className="text-sm text-gray-700 dark:text-purple-300 mb-4 line-clamp-2">
-                    {project.description}
-                  </p>
+                  <div
+                    className="text-sm text-gray-700 dark:text-purple-300 mt-2 line-clamp-2"
+                    dangerouslySetInnerHTML={{ __html: project.description }}
+                  />
 
                   <div className="flex items-center justify-between mt-4">
                     <div className="flex gap-3">

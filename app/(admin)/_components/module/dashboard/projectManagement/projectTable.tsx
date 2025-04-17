@@ -34,7 +34,7 @@ export default function ProjectsTable({ projects }: TProjectTableProps) {
         <TableHeader>
           <TableColumn>Image</TableColumn>
           <TableColumn>Title</TableColumn>
-          <TableColumn>Description</TableColumn>
+
           <TableColumn>GitHub (Frontend)</TableColumn>
           <TableColumn>GitHub (Backend)</TableColumn>
           <TableColumn>Live Site</TableColumn>
@@ -51,13 +51,6 @@ export default function ProjectsTable({ projects }: TProjectTableProps) {
                 <Tooltip className="w-[250px]" content={project.title}>
                   <p className="whitespace-nowrap">
                     {project.title.slice(0, 10) + '...'}
-                  </p>
-                </Tooltip>
-              </TableCell>
-              <TableCell>
-                <Tooltip className="w-[250px]" content={project.description}>
-                  <p className="whitespace-nowrap">
-                    {project.description.slice(0, 20) + '...'}
                   </p>
                 </Tooltip>
               </TableCell>

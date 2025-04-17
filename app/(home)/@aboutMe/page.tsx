@@ -7,7 +7,6 @@ import { getAllAbout } from '@/service/aboutService/aboutService';
 import { getAllProjects } from '@/service/projectService/projectService';
 import { getAllBlogs } from '@/service/blogService/blogService';
 import { getAllSkills } from '@/service/skillsService/skillsService';
-import Loader from '../_components/ui/RLoader/loader';
 
 export default async function AboutPage() {
   const aboutData = await getAllAbout();

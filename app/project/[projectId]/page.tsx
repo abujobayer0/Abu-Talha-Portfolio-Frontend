@@ -23,8 +23,11 @@ export default async function ProjectDetailsPage({ params }: TDetailsParams) {
     <div className="pt-4 px-2">
       <Navbar />
       <div className="mt-4">
-        <ProjectDetails project={project} />
-        <MoreProductsSlider projects={projects} />{' '}
+        <ProjectDetails
+          project={project}
+          projects={projects}
+          currentId={projectId}
+        />
         <div className="w-full h-full">
           <div className="absolute top-0 left-0 w-full h-[60px] bg-[#9333ea] blur-[150px] transform rotate-45" />
         </div>

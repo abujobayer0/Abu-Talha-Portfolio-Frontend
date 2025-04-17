@@ -14,4 +14,5 @@ export interface TProject {
   images: string[];
   createdAt: string;
   updatedAt: string;
+  matchCount?: number;
 }

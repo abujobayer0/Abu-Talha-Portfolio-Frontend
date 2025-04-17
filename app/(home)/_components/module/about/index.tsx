@@ -8,6 +8,7 @@ import AchievementsSection from './achivement';
 import { TAbout, TBlog, TProject, TSkill } from '@/types';
 import { useGetLink } from '@/hooks/links.hook';
 import GridBackgrounds from '@/components/common/backgrounds/grid';
+import SkewedCardWithFloatingElements from './ImageCard';
 
 interface TAboutProps {
   about: TAbout;
@@ -24,8 +25,7 @@ export default function About({ about, projects, skills, blogs }: TAboutProps) {
       <div className="container mx-auto px-4 relative">
         <GridBackgrounds />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          {/* Image Section */}
-          <motion.div
+          {/* <motion.div
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
@@ -34,16 +34,17 @@ export default function About({ about, projects, skills, blogs }: TAboutProps) {
             <div className="relative w-full h-80 md:h-96 overflow-hidden rounded-2xl shadow-xl">
               {about.image && (
                 <Image
-                  src={about.image}
+                  // src={'https://i.ibb.co.com/66fGXM3/SRP09124.jpg'}
+                  src={'https://i.ibb.co.com/zhXLRPcn/IMG-5277-2-Photoroom.png'}
                   alt={about.title || 'Profile Image'}
                   fill
                   style={{ filter: 'brightness(80%)' }}
-                  className="object-cover hover:scale-105 transition-transform duration-500"
+                  className="object-cover  scale-90 rounded-2xl transition-transform duration-500"
                 />
               )}
             </div>
-            <div className="absolute top-1/4 -left-20 w-80 h-80 rounded-full bg-purple-500/20 blur-3xl z-0"></div>
-          </motion.div>
+          </motion.div> */}
+          <SkewedCardWithFloatingElements />
 
           {/* Text Section */}
           <motion.div
