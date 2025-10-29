@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { Providers } from '../providers/providers';
 
 import Container from './(home)/_components/ui/container';
-
+import { Analytics } from '@vercel/analytics/next';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/config/fonts';
 
@@ -119,7 +119,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           {/* Main content layout */}
-          <Container>{children}</Container>
+          <Container>
+            {children}
+            <Analytics />
+          </Container>
         </Providers>
       </body>
     </html>
