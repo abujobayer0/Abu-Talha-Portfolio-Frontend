@@ -8,6 +8,7 @@ import { Navbar } from './_components/ui/navbar';
 import StatsRibbon from './_components/ui/statsRibbon';
 import PricingSection from './_components/ui/pricing';
 import ProcessSection from './_components/ui/processSection';
+import FloatingMessageButton from './_components/ui/floatingMessageButton';
 
 interface CommonLayoutProps {
   children: ReactNode;
@@ -103,6 +104,7 @@ export default function CommonLayout({
         </div>
 
         <Footer />
+        <FloatingMessageButton />
       </div>
     </LazyMotion>
   );

@@ -17,9 +17,19 @@ export async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get('accessToken')?.value;
 
   // Allow unauthenticated access to auth routes
-  if (AuthRoutes.includes(pathname)) {
+  if (AuthRoutes.some((route) => pathname === route || pathname.startsWith(route + '/'))) {
     // If already logged in, avoid showing login
     if (accessToken) {
+      try {
+        const decoded: any = jwtDecode(accessToken);
+        const role = decoded?.role;
+        // Only redirect to dashboard if user is admin
+        if (role && (role === 'ADMIN' || role === 'admin')) {
+          return NextResponse.redirect(new URL('/dashboard', request.url));
+        }
+      } catch {
+        // Invalid token, allow login
+      }
       return NextResponse.redirect(new URL('/', request.url));
     }
     return NextResponse.next();
@@ -30,7 +40,7 @@ export async function middleware(request: NextRequest) {
 
   if (!accessToken) {
     if (isDashboard) {
-      return NextResponse.redirect(new URL(`/login?redirect=${pathname}`, request.url));
+      return NextResponse.redirect(new URL(`/login?redirect=${encodeURIComponent(pathname)}`, request.url));
     }
     return NextResponse.next();
   }
@@ -40,15 +50,29 @@ export async function middleware(request: NextRequest) {
   try {
     const decoded: any = jwtDecode(accessToken);
     role = decoded?.role ?? null;
-  } catch {
-    role = null;
+
+    // Normalize role to uppercase for matching
+    if (role) {
+      role = role.toUpperCase() === 'ADMIN' ? 'ADMIN' : role;
+    }
+  } catch (error) {
+    // Token is invalid or expired, redirect to login
+    if (isDashboard) {
+      return NextResponse.redirect(new URL(`/login?redirect=${encodeURIComponent(pathname)}`, request.url));
+    }
+    return NextResponse.next();
   }
 
   if (isDashboard) {
-    if (role && roleBasedRoutes[role as Role]) {
-      const allowed = roleBasedRoutes[role as Role].some((re) => re.test(pathname));
-      if (allowed) return NextResponse.next();
+    // Allow if role is ADMIN (case-insensitive) and path matches
+    if (role && role.toUpperCase() === 'ADMIN') {
+      const normalizedRole: Role = 'ADMIN';
+      const allowed = roleBasedRoutes[normalizedRole].some((re) => re.test(pathname));
+      if (allowed) {
+        return NextResponse.next();
+      }
     }
+    // If role doesn't match or path doesn't match, redirect to home
     return NextResponse.redirect(new URL('/', request.url));
   }
 
@@ -57,5 +81,5 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/dashboard/:path*', '/login'],
+  matcher: ['/dashboard/:path*', '/login', '/register'],
 };

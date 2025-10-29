@@ -54,15 +54,13 @@ export const CommonBlogCard = ({ blog, isEditable, index = 0 }: BlogCardProps) =
       custom={index}
       viewport={{ once: true }}
       variants={cardContainerVariants}
-      className='relative cursor-pointer'
+      className='relative'
     >
-      <div className='group relative bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl overflow-hidden border border-purple-100 dark:border-purple-900 shadow-lg hover:shadow-purple-300/30 hover:ring-2 hover:ring-purple-400/50 transition-all duration-300'>
-        {/* Make entire card clickable */}
-        <Link
-          href={`/blogs/${blog._id}`}
-          aria-label={`Read blog: ${blog.title}`}
-          className='absolute inset-0 z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-purple-500 rounded-2xl'
-        />
+      <Link
+        href={`/blogs/${blog._id}`}
+        aria-label={`Read blog: ${blog.title}`}
+        className='block group relative bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl overflow-hidden border border-purple-100 dark:border-purple-900 shadow-lg hover:shadow-purple-300/30 hover:ring-2 hover:ring-purple-400/50 transition-all duration-300 cursor-pointer'
+      >
         {/* Animated glow background on hover */}
         <motion.div
           className='absolute inset-0 rounded-2xl z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300'
@@ -71,18 +69,18 @@ export const CommonBlogCard = ({ blog, isEditable, index = 0 }: BlogCardProps) =
           }}
         />
 
-        <div className='p-5'>
+        <div className='p-5 relative z-10'>
           {/* Author info */}
           <div className='flex gap-3 items-center mb-4 relative z-10'>
             <div className='relative size-10 rounded-full bg-gradient-to-br from-purple-200 to-purple-400/40 shadow-inner shadow-purple-500/20 overflow-hidden'>
               <Image src={blog.author.image} alt={blog.author.name} fill className='object-cover' />
             </div>
-            <div className='flex flex-col items-start'>
+            <div className='flex flex-col items-start flex-1'>
               <h3 className='font-bold text-purple-800 dark:text-purple-200 text-sm'>{blog.author.name}</h3>
               <p className='text-xs text-gray-600 dark:text-purple-300'>{new Date(blog.createdAt).toLocaleDateString()}</p>
             </div>
             {isEditable && (
-              <div className='flex space-x-3 relative z-30' onClick={(e) => e.stopPropagation()}>
+              <div className='flex space-x-3 relative z-30' onClick={(e) => e.preventDefault()}>
                 <EditBlogModal blog={blog} />
                 <DeleteBlogModal blog={blog} />
               </div>
@@ -118,7 +116,7 @@ export const CommonBlogCard = ({ blog, isEditable, index = 0 }: BlogCardProps) =
             </span>
           </div>
         </div>
-      </div>
+      </Link>
     </motion.div>
   );
 };

@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import React, { ReactNode, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
+import { Button } from '@nextui-org/button';
 
 import { siteConfig } from '@/config/site';
 import Logo from '@/app/(home)/_components/ui/logo';
@@ -24,11 +25,11 @@ export default function SidebarMain({ children }: { children: ReactNode }) {
 
   const sidebarVariants = {
     expanded: {
-      width: 260,
+      width: 280,
       transition: { duration: 0.4, ease: 'easeInOut' },
     },
     collapsed: {
-      width: 72,
+      width: 80,
       transition: { duration: 0.4, ease: 'easeInOut' },
     },
   };
@@ -38,77 +39,164 @@ export default function SidebarMain({ children }: { children: ReactNode }) {
     visible: (i: number) => ({
       opacity: 1,
       x: 0,
-      transition: { delay: i * 0.05, duration: 0.3 },
+      transition: { delay: i * 0.03, duration: 0.3 },
     }),
   };
 
   const linkTextVariants = {
-    expanded: { opacity: 1, display: 'inline' },
-    collapsed: { opacity: 0, transitionEnd: { display: 'none' } },
+    expanded: { opacity: 1, display: 'inline', x: 0 },
+    collapsed: { opacity: 0, x: -10, transitionEnd: { display: 'none' } },
   };
 
   return (
-    <div className="flex h-screen bg-default-50">
+    <div className='flex h-screen bg-gradient-to-br from-gray-50 to-purple-50/30 dark:from-gray-950 dark:to-purple-950/20 p-4 gap-4'>
       {/* Sidebar */}
       <motion.aside
         animate={isLargeScreen ? 'expanded' : 'collapsed'}
         variants={sidebarVariants}
-        className="fixed top-0 left-0 h-full bg-white border-r border-gray-200 dark:bg-zinc-900 dark:border-zinc-700 shadow-sm z-20 flex flex-col justify-between py-6"
+        className='relative h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-purple-200/50 dark:border-purple-900/50 shadow-xl z-20 flex flex-col overflow-hidden rounded-2xl flex-shrink-0'
       >
-        <div className="flex flex-col items-center gap-8">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 px-4">
-            <Logo />
-            <motion.span
-              className="text-lg font-semibold text-zinc-800 dark:text-white hidden lg:inline"
-              animate={isLargeScreen ? 'expanded' : 'collapsed'}
-              variants={linkTextVariants}
-            >
-              Siyte
-            </motion.span>
-          </Link>
+        {/* Gradient accent at top */}
+        <div className='h-1 bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-600 rounded-t-2xl' />
 
-          {/* Nav */}
-          <motion.nav
-            className="flex flex-col w-full items-center lg:items-start gap-2 mt-6 px-2"
-            initial="hidden"
-            animate="visible"
-          >
+        <div className='flex flex-col h-full py-6 px-4'>
+          {/* Logo Section */}
+          <motion.div className='mb-8'>
+            <Link
+              href='/'
+              className='flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors group'
+            >
+              <div className='relative'>
+                <Logo />
+                <div className='absolute inset-0 bg-purple-400/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity' />
+              </div>
+              <AnimatePresence mode='wait'>
+                {isLargeScreen && (
+                  <motion.span
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    className='text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent'
+                  >
+                    Dashboard
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </Link>
+          </motion.div>
+
+          {/* Nav Section */}
+          <motion.nav className='flex flex-col flex-1 gap-2 overflow-y-auto scrollbar-hide px-1' initial='hidden' animate='visible'>
             {siteConfig.dashboardMenuItems.map((item, i) => {
               const isActive = pathname === item.path;
               return (
-                <motion.div
-                  key={i}
-                  variants={menuItemVariants}
-                  custom={i}
-                  className="w-full"
-                >
-                  <Link
+                <motion.div key={i} variants={menuItemVariants} custom={i} className='relative'>
+                  <Button
+                    as={Link}
                     href={item.path}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-colors duration-300 group ${
+                    variant={isActive ? 'solid' : 'light'}
+                    color={isActive ? 'secondary' : 'default'}
+                    className={`relative justify-start h-auto min-w-0 px-4 py-3 transition-all duration-300 group overflow-hidden ${
                       isActive
-                        ? 'bg-warning-500 text-white'
-                        : 'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+                        ? 'bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 text-white shadow-lg shadow-purple-500/40 font-semibold border border-purple-400/30'
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-purple-50/70 dark:hover:bg-purple-900/30 hover:text-purple-600 dark:hover:text-purple-400 hover:border-purple-200 dark:hover:border-purple-800 border border-transparent'
                     }`}
+                    radius='lg'
+                    fullWidth
                   >
-                    <item.icon className="w-5 h-5 shrink-0" />
-                    <motion.span
-                      className="text-sm font-medium"
-                      animate={isLargeScreen ? 'expanded' : 'collapsed'}
-                      variants={linkTextVariants}
+                    {/* Active shimmer effect */}
+                    {isActive && (
+                      <motion.div
+                        className='absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent'
+                        initial={{ x: '-100%' }}
+                        animate={{ x: '100%' }}
+                        transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                      />
+                    )}
+
+                    {/* Active background glow */}
+                    {isActive && (
+                      <motion.div
+                        layoutId='activeBg'
+                        className='absolute inset-0 rounded-lg bg-gradient-to-r from-purple-500/30 to-indigo-500/30 blur-2xl -z-10'
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                      />
+                    )}
+
+                    {/* Left border indicator for active */}
+                    {isActive && (
+                      <motion.div
+                        layoutId='activeBorder'
+                        className='absolute left-0 top-1 bottom-1 w-1 bg-white rounded-r-full shadow-lg shadow-white/50'
+                        initial={{ scaleY: 0 }}
+                        animate={{ scaleY: 1 }}
+                        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                      />
+                    )}
+
+                    <motion.div
+                      animate={isActive ? { scale: 1.05 } : { scale: 1 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                      className='flex items-center gap-3 w-full relative z-10'
                     >
-                      {item.name}
-                    </motion.span>
-                  </Link>
+                      <motion.div animate={isActive ? { rotate: [0, -10, 10, 0] } : {}} transition={{ duration: 0.5 }}>
+                        <item.icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-white drop-shadow-sm' : 'text-current'}`} />
+                      </motion.div>
+                      <AnimatePresence mode='wait'>
+                        {isLargeScreen && (
+                          <motion.span
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -10 }}
+                            className={`text-sm font-medium whitespace-nowrap flex-1 text-left ${
+                              isActive ? 'text-white drop-shadow-sm' : ''
+                            }`}
+                          >
+                            {item.name}
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+
+                    {/* Active indicator dot on right */}
+                    {isActive && (
+                      <motion.div
+                        layoutId='activeDot'
+                        className='absolute right-3 w-2 h-2 rounded-full bg-white/90 shadow-md'
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0, opacity: 0 }}
+                        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                  </Button>
                 </motion.div>
               );
             })}
           </motion.nav>
+
+          {/* Bottom Section */}
+          <div className='mt-auto pt-4 border-t border-purple-200/50 dark:border-purple-900/50'>
+            <AnimatePresence>
+              {isLargeScreen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className='px-3 py-2 text-xs text-gray-500 dark:text-gray-400 text-center'
+                >
+                  Admin Panel
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </motion.aside>
 
       {/* Content */}
-      <main className="flex-1 ml-[72px] lg:ml-[260px] p-6 overflow-y-auto scrollbar-hide">
+      <main className='flex-1 p-6 overflow-y-auto scrollbar-hide rounded-2xl bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm h-full border border-purple-100/50 dark:border-purple-900/30 shadow-lg'>
         {children}
       </main>
     </div>
