@@ -125,7 +125,7 @@ const Contact: React.FC = () => {
   const inputIconStyle = 'text-gray-400';
 
   return (
-    <section id='contact' className='py-12 relative overflow-hidden'>
+    <section id='contact' className='py-12 relative'>
       <GridBackgrounds />
 
       <div className='container mx-auto px-4 relative z-10'>
