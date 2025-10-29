@@ -107,14 +107,10 @@ export const Navbar = ({ activeSection = '' }) => {
         <NavbarItem className='hidden sm:flex gap-2'>
           <NavButtons />
         </NavbarItem>
-        <NavbarItem className='hidden sm:flex gap-2'>
-          <ThemeSwitch />
-        </NavbarItem>
       </NavbarContent>
 
       {/* Mobile menu toggle */}
       <NavbarContent className='flex xl:hidden basis-1 pl-4' justify='end'>
-        <ThemeSwitch />
         <NavbarMenuToggle />
       </NavbarContent>
 

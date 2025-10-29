@@ -7,10 +7,7 @@ interface PaginationControlsProps {
   currentPage: number;
 }
 
-export default function PaginationControls({
-  totalPages,
-  currentPage,
-}: PaginationControlsProps) {
+export default function PaginationControls({ totalPages, currentPage }: PaginationControlsProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -24,15 +21,15 @@ export default function PaginationControls({
   };
 
   return (
-    <div className="flex justify-center my-8">
+    <div className='flex justify-center my-8'>
       <Pagination
         showControls
-        color="warning"
+        color='warning'
         initialPage={currentPage}
         page={currentPage}
-        size="sm"
+        size='sm'
         total={totalPages}
-        variant="bordered"
+        variant='bordered'
         onChange={handlePageChange}
       />
     </div>

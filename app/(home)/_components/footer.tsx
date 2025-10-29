@@ -14,7 +14,7 @@ export default function Footer() {
 
   return (
     <footer>
-      <div className='max-w-6xl mx-auto px-4 py-10 md:py-16'>
+      <div className='max-w-7xl mx-auto px-4 py-10 md:py-16'>
         {/* Business CTA Banner */}
         <div className='mb-10 rounded-2xl border border-default-200 bg-white/30 dark:bg-gray-800/30 backdrop-blur-md p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4'>
           <div>
@@ -24,7 +24,7 @@ export default function Footer() {
           <div>
             <a
               href='/contact'
-              className='inline-flex items-center justify-center rounded-full bg-warning text-gray-900 font-semibold px-6 py-3 hover:opacity-90 transition'
+              className='inline-flex items-center justify-center rounded-full bg-warning text-gray-50 font-semibold px-6 py-3 hover:opacity-90 transition'
             >
               Hire Me
             </a>
@@ -34,7 +34,7 @@ export default function Footer() {
           <div className='flex flex-col space-y-4'>
             <h3 className='text-lg font-semibold text-default-800'>About Me</h3>
             <p className='text-sm text-default-600'>
-              I am a results-driven developer crafting innovative, high-impact solutions. My portfolio highlights projects that combine
+              I am a results-driven developer crafting innovative, high-impact solutions. My case studies highlight projects that combine
               cutting-edge web development, intuitive design, and business-focused functionality to help organizations streamline operations
               and achieve measurable growth.
             </p>

@@ -8,7 +8,7 @@ import { getAllProjects } from '@/service/projectService/projectService';
 
 export const metadata: Metadata = {
   title: 'Projects',
-  description: 'Browse through my portfolio of projects',
+  description: 'Explore client projects and case studies',
 };
 
 interface ProjectsPageProps {
@@ -33,7 +33,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
 
   return (
     <div>
-      <Title title1='Projects' title2='My Projects' />
+      <Title title1='Projects' title2='Case Studies' />
       <Project projects={projects} />
       <PaginationControls currentPage={currentPage} totalPages={totalPages} />
     </div>

@@ -2,9 +2,9 @@ export type SiteConfig = typeof siteConfig;
 import { FaUser, FaLaptopCode, FaGraduationCap, FaProjectDiagram, FaBlog, FaHome } from 'react-icons/fa';
 
 export const siteConfig = {
-  name: "Abu Talha's Portfolio",
+  name: 'Abu Talha — Web & Mobile Development',
   ogImage: 'https://i.ibb.co.com/yFgLxsCX/IMG-6807.jpg',
-  url: 'https://abutalha.vercel.app/',
+  url: 'https://abutalhawebdevelopment.com/',
   description:
     'Full Stack Developer with a passion for crafting high-performance web and mobile applications that drive user engagement and business growth. Proven track record in redesigning platforms, streamlining workflows, and solving complex problems to deliver scalable, user-friendly solutions. Skilled in React, Next.js, Node.js, and TypeScript, with a deep focus on real-time systems, clean architecture, and impactful digital transformation.',
   navItems: [
