@@ -43,13 +43,8 @@ export default function SidebarMain({ children }: { children: ReactNode }) {
     }),
   };
 
-  const linkTextVariants = {
-    expanded: { opacity: 1, display: 'inline', x: 0 },
-    collapsed: { opacity: 0, x: -10, transitionEnd: { display: 'none' } },
-  };
-
   return (
-    <div className='flex h-screen bg-gradient-to-br from-gray-50 to-purple-50/30 dark:from-gray-950 dark:to-purple-950/20 p-4 gap-4'>
+    <div className='flex h-screen bg-gradient-to-br from-gray-50 to-purple-50/30 dark:from-gray-950 w-full dark:to-purple-950/20 p-4 gap-4'>
       {/* Sidebar */}
       <motion.aside
         animate={isLargeScreen ? 'expanded' : 'collapsed'}
@@ -196,7 +191,7 @@ export default function SidebarMain({ children }: { children: ReactNode }) {
       </motion.aside>
 
       {/* Content */}
-      <main className='flex-1 p-6 overflow-y-auto scrollbar-hide rounded-2xl bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm h-full border border-purple-100/50 dark:border-purple-900/30 shadow-lg'>
+      <main className='flex-1 w-full p-6 overflow-y-auto scrollbar-hide rounded-2xl bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm h-full border border-purple-100/50 dark:border-purple-900/30 shadow-lg'>
         {children}
       </main>
     </div>

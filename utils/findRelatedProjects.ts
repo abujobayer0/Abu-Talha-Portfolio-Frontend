@@ -7,14 +7,8 @@ import { TProject } from '@/types';
  * @param {number} minTechMatch - Minimum number of matching technologies required (default: 4)
  * @return {Array} - Array of related projects sorted by number of matching technologies
  */
-export function findRelatedProjects(
-  allProjects: TProject[],
-  currentProjectId: string,
-  minTechMatch = 3
-) {
-  const currentProject = allProjects.find(
-    (project) => project._id === currentProjectId
-  );
+export function findRelatedProjects(allProjects: TProject[], currentProjectId: string, minTechMatch = 2) {
+  const currentProject = allProjects.find((project) => project._id === currentProjectId);
 
   if (!currentProject) {
     console.error('Current project not found!');
@@ -25,9 +19,7 @@ export function findRelatedProjects(
     .filter((project) => {
       if (project._id === currentProjectId) return false;
       const projectTechIds = project.technologies.map((tech) => tech._id);
-      const matchingTechs = projectTechIds.filter((techId) =>
-        currentTechIds.includes(techId)
-      );
+      const matchingTechs = projectTechIds.filter((techId) => currentTechIds.includes(techId));
 
       project.matchCount = matchingTechs.length;
 

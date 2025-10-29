@@ -11,17 +11,19 @@ import {
   NavbarBrand,
 } from '@nextui-org/navbar';
 import { Link as ScrollLink, Events } from 'react-scroll';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
+import { Search } from 'lucide-react';
 
 import { linkVariants, menuVariants } from './animation';
 import Logo from './logo';
 import NavButtons from './navButtons';
 import AnimatedButton from './button';
+import SearchBar from './searchBar';
 
-import { ThemeSwitch } from '@/app/(home)/_components/ui/theme-switch';
 import { siteConfig } from '@/config/site';
 import { useRouter } from 'next/navigation';
+import { Button } from '@nextui-org/button';
 
 const underlineVariants = {
   initial: { width: 0 },
@@ -35,6 +37,7 @@ export const Navbar = ({ activeSection = '' }) => {
   const router = useRouter();
   const [shouldHideOnScroll, setShouldHideOnScroll] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Register scroll events
   useEffect(() => {
@@ -102,15 +105,54 @@ export const Navbar = ({ activeSection = '' }) => {
         </div>
       </NavbarContent>
 
-      {/* Right section: Theme Switch and Buttons */}
+      {/* Right section: Search, Theme Switch and Buttons */}
       <NavbarContent className='hidden xl:flex basis-1/5 sm:basis-full' justify='end'>
-        <NavbarItem className='hidden sm:flex gap-2'>
-          <NavButtons />
+        <NavbarItem className='hidden sm:flex gap-2 items-center'>
+          {/* Search Button */}
+          <Button
+            isIconOnly
+            aria-label='Search'
+            onClick={() => setIsSearchOpen(true)}
+            color='warning'
+            radius='full'
+            size='sm'
+            variant='faded'
+            className='min-w-0'
+          >
+            <Search className='w-4 h-4 text-default-500' />
+          </Button>
+
+          {/* Hide NavButtons when search is open */}
+          <AnimatePresence mode='wait'>
+            {!isSearchOpen && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: 'auto' }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <NavButtons />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </NavbarItem>
       </NavbarContent>
 
       {/* Mobile menu toggle */}
-      <NavbarContent className='flex xl:hidden basis-1 pl-4' justify='end'>
+      <NavbarContent className='flex xl:hidden basis-1 pl-4 gap-2' justify='end'>
+        {/* Mobile Search Button */}
+        <Button
+          isIconOnly
+          aria-label='Search'
+          onClick={() => setIsSearchOpen(true)}
+          color='warning'
+          radius='full'
+          size='sm'
+          variant='faded'
+          className='min-w-0'
+        >
+          <Search className='w-4 h-4 text-default-500' />
+        </Button>
         <NavbarMenuToggle />
       </NavbarContent>
 
@@ -157,6 +199,9 @@ export const Navbar = ({ activeSection = '' }) => {
           <AnimatedButton href='/dashboard' text='Dashboard' />
         </NavbarItem>
       </NavbarMenu>
+
+      {/* Search Bar Component */}
+      <SearchBar isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </NextUINavbar>
   );
 };

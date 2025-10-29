@@ -5,7 +5,7 @@ import UpdateLinkForm from '../_components/module/dashboard/aboutManagement/link
 
 export default function Dashboard() {
   return (
-    <div>
+    <div className='w-full'>
       <Profile />
       <UpdateLinkForm />
     </div>
