@@ -84,6 +84,17 @@ const Contact: React.FC = () => {
 
       await emailjs.send('service_hc9j2be', 'template_5qtq5wa', emailParams, 'EKumPNPEupZ1Kc9zQ');
 
+      // Twitter conversion tracking event
+      if (typeof window !== 'undefined' && (window as any).twq) {
+        (window as any).twq('event', 'tw-qg619-qg619', {
+          email_address: emailParams.email,
+          name: emailParams.name,
+          phone_number: emailParams.phone,
+          content_name: emailParams.title || 'Contact Form Submission',
+          content_category: 'Contact',
+        });
+      }
+
       setSuccessMsg(`Thank you, ${username}! Your message has been sent successfully.`);
       setFormValues({
         username: '',

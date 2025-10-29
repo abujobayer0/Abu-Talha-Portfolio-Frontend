@@ -65,6 +65,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Meta tags for SEO */}
         <meta content='width=device-width, initial-scale=1' name='viewport' />
         <meta content='#000000' name='theme-color' />
+        {/* Twitter conversion tracking base code */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
+a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+twq('config','qg619');`,
+          }}
+        />
+        {/* End Twitter conversion tracking base code */}
       </head>
       <body className={clsx('min-h-screen bg-background font-sans md:comic-neue antialiased', fontSans.variable)}>
         {/* Organization and WebSite JSON-LD */}
