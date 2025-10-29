@@ -1,5 +1,4 @@
 import React from 'react';
-import { Navbar } from '@/app/(home)/_components/ui/navbar';
 import { getAllProjects, getSingleProject } from '@/service/projectService/projectService';
 import { TProject } from '@/types';
 import ProjectDetails from '@/app/(home)/_components/module/pojectDetaisl';

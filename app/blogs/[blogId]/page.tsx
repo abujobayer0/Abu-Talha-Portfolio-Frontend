@@ -77,8 +77,6 @@ export default async function BlogDetailsPage({ params }: { params: { blogId: st
 
   return (
     <div className='bg-background min-h-screen'>
-      <Navbar />
-
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10'>
         <BackHeader />
         <script type='application/ld+json' suppressHydrationWarning dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

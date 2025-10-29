@@ -1,8 +1,8 @@
-import React, { Suspense } from "react";
+import React, { Suspense } from 'react';
 
-import BlogCard from "../../_components/module/dashboard/blogManagement/blogs";
+import BlogCard from '../../_components/module/dashboard/blogManagement/blogs';
 
-import { getAllBlogs } from "@/service/blogService/blogService";
+import { getAllBlogs } from '@/service/blogService/blogService';
 
 export default async function BlogsManagement() {
   const data = await getAllBlogs();
