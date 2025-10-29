@@ -144,7 +144,10 @@ const Contact: React.FC = () => {
       <GridBackgrounds />
 
       <div className="container mx-auto px-4 relative z-10">
-        <Title title1="Contact" title2="Get In Touch" />
+        <Title title1="Hire" title2="Let’s Work Together" />
+        <p className="mt-2 text-center text-gray-400 max-w-2xl mx-auto">
+          Tell me briefly about your project, goals, timeline, and budget. I’ll reply with the next steps within 24 hours.
+        </p>
 
         <div className="flex flex-col lg:flex-row gap-8 mt-12">
           {/* Left Column - Contact Info */}

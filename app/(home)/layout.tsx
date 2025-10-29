@@ -1,12 +1,10 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
-import { Element, Events, scrollSpy, scroller } from 'react-scroll';
+import { ReactNode } from 'react';
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 
 import Footer from './_components/footer';
 import { Navbar } from './_components/ui/navbar';
-import RLoader from './_components/ui/RLoader/loading';
 
 interface CommonLayoutProps {
   children: ReactNode;
@@ -42,154 +40,65 @@ export default function CommonLayout({
   myBlogs,
   contactMe,
 }: CommonLayoutProps) {
-  const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState('home');
-
-  // Handle initial loading state
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Setup scroll spy and event listeners with optimized settings
-  useEffect(() => {
-    // More performant scroll handling
-    const handleScroll = () => {
-      // Only update scrollSpy when needed
-      scrollSpy.update();
-    };
-
-    // Configure scroll options for the entire app
-    Events.scrollEvent.register('begin', (to) => {
-      setActiveSection(to);
-    });
-
-    Events.scrollEvent.register('end', (to) => {
-      setActiveSection(to);
-    });
-
-    // Initialize scrollSpy
-    scrollSpy.update();
-
-    // Add throttled scroll listener for better performance
-    let ticking = false;
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    // Clean up events when component unmounts
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      Events.scrollEvent.remove('begin');
-      Events.scrollEvent.remove('end');
-    };
-  }, []);
-
-  if (loading) {
-    return <RLoader />;
-  }
-
   return (
     <LazyMotion features={domAnimation}>
-      <div className="space-y-5 pt-4 px-2">
-        <Navbar activeSection={activeSection} />
+      <div className='space-y-5 pt-4 px-2'>
+        <Navbar />
 
-        {/* Main content with appropriate spacing */}
-        <div className="space-y-20 md:space-y-28">
-          <Element name="home" className="pt-4 min-h-[80vh] flex items-center">
+        <div className='space-y-20 md:space-y-28'>
+          <section id='home' className='pt-4 min-h-[80vh] flex items-center'>
             <m.div
-              initial="hidden"
-              whileInView="visible"
+              initial='hidden'
+              whileInView='visible'
               viewport={{ once: true, amount: 0.2 }}
               variants={sectionVariants}
-              className="w-full"
+              className='w-full'
             >
               {children}
             </m.div>
-          </Element>
-
-          {/* Skills section */}
-          <Element name="skills" className="pt-16 min-h-[80vh]">
-            <m.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              variants={sectionVariants}
-            >
-              {skills}
-            </m.div>
-          </Element>
-
-          {/* Experience section */}
-          <Element name="experience" className="pt-16 min-h-[80vh]">
-            <m.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              variants={sectionVariants}
-            >
-              {experience}
-            </m.div>
-          </Element>
-
-          {/* About section */}
-          <Element name="about" className="pt-16 min-h-[80vh]">
-            <m.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              variants={sectionVariants}
-            >
-              {aboutMe}
-            </m.div>
-          </Element>
+          </section>
 
           {/* Projects section */}
-          <Element name="projects" className="pt-16 min-h-[80vh]">
-            <m.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              variants={sectionVariants}
-            >
+          <section id='projects' className='pt-16 min-h-[80vh]'>
+            <m.div initial='hidden' whileInView='visible' viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
               {projects}
             </m.div>
-          </Element>
+          </section>
+
+          {/* Skills section */}
+          <section id='skills' className='pt-16 min-h-[80vh]'>
+            <m.div initial='hidden' whileInView='visible' viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
+              {skills}
+            </m.div>
+          </section>
+
+          {/* Experience section */}
+          <section id='experience' className='pt-16 min-h-[80vh]'>
+            <m.div initial='hidden' whileInView='visible' viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
+              {experience}
+            </m.div>
+          </section>
+
+          {/* About section */}
+          <section id='about' className='pt-16 min-h-[80vh]'>
+            <m.div initial='hidden' whileInView='visible' viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
+              {aboutMe}
+            </m.div>
+          </section>
 
           {/* Blogs section */}
-          <Element name="blogs" className="pt-16 min-h-[80vh]">
-            <m.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              variants={sectionVariants}
-            >
+          <section id='blogs' className='pt-16 min-h-[80vh]'>
+            <m.div initial='hidden' whileInView='visible' viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
               {myBlogs}
             </m.div>
-          </Element>
+          </section>
 
           {/* Contact section */}
-          <Element name="contact" className="pt-16 min-h-[80vh]">
-            <m.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              variants={sectionVariants}
-            >
+          <section id='contact' className='pt-16 min-h-[80vh]'>
+            <m.div initial='hidden' whileInView='visible' viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
               {contactMe}
             </m.div>
-          </Element>
+          </section>
         </div>
 
         <Footer />

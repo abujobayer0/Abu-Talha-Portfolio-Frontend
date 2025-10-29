@@ -17,16 +17,14 @@ interface ProjectsPageProps {
   };
 }
 
-export default async function ProjectsPage({
-  searchParams,
-}: ProjectsPageProps) {
+export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   const currentPage = Number(searchParams.page) || 1;
   const limit = 6;
 
   const data = await getAllProjects({
     limit,
     page: currentPage,
-    sort: 'createdAt',
+    sort: '-updatedAt',
   });
 
   const projects = data?.data;
@@ -35,7 +33,7 @@ export default async function ProjectsPage({
 
   return (
     <div>
-      <Title title1="Projects" title2="My Projects" />
+      <Title title1='Projects' title2='My Projects' />
       <Project projects={projects} />
       <PaginationControls currentPage={currentPage} totalPages={totalPages} />
     </div>

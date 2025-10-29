@@ -1,12 +1,5 @@
 export type SiteConfig = typeof siteConfig;
-import {
-  FaUser,
-  FaLaptopCode,
-  FaGraduationCap,
-  FaProjectDiagram,
-  FaBlog,
-  FaHome,
-} from 'react-icons/fa';
+import { FaUser, FaLaptopCode, FaGraduationCap, FaProjectDiagram, FaBlog, FaHome } from 'react-icons/fa';
 
 export const siteConfig = {
   name: "Abu Talha's Portfolio",
@@ -33,15 +26,15 @@ export const siteConfig = {
     },
     {
       label: 'Projects',
-      href: '#projects',
+      href: '/projects',
     },
     {
       label: 'Blogs',
-      href: '#blogs',
+      href: '/blogs',
     },
     {
       label: 'Contact',
-      href: '#contact',
+      href: '/contact',
     },
   ],
 
@@ -84,7 +77,6 @@ export const siteConfig = {
     facebook: 'https://www.facebook.com/abutalhazubayermunna',
     twitter: 'https://x.com/abu_jobaye71370',
     discord: 'https://discord.com/channels/atmjobayer',
-    resume:
-      'https://drive.google.com/file/d/1YIFQMCuGD8NCdpW4XuSH_01Ft9bPh_2V/view?usp=drive_link',
+    resume: 'https://drive.google.com/file/d/1YIFQMCuGD8NCdpW4XuSH_01Ft9bPh_2V/view?usp=drive_link',
   },
 };

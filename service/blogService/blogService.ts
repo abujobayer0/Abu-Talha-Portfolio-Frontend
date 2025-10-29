@@ -20,16 +20,17 @@ export const createBlog = async (BlogData: FieldValues) => {
 };
 
 // Fetch all blog
-export const getAllBlogs = async () => {
-  let fetchOptions = {};
-
-  fetchOptions = {
+export const getAllBlogs = async (query?: Record<string, any>) => {
+  const fetchOptions = {
     next: {
       tags: ['blogs'],
     },
   };
 
-  const { data } = await axiosInstance.get('/blogs', { fetchOptions });
+  const { data } = await axiosInstance.get('/blogs', {
+    params: query,
+    ...fetchOptions,
+  });
 
   return data;
 };
@@ -43,10 +44,7 @@ export const getSingleBlog = async (blogId: string) => {
 // Update blog
 export const editBlog = async (BlogData: TUpdateData) => {
   try {
-    const { data } = await axiosInstance.patch(
-      `/blogs/${BlogData?.id}`,
-      BlogData?.data
-    );
+    const { data } = await axiosInstance.patch(`/blogs/${BlogData?.id}`, BlogData?.data);
 
     revalidateTag('blogs');
 

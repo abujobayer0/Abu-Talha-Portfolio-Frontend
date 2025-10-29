@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import AnimatedButton from '../../ui/button';
 import AchievementsSection from './achivement';
@@ -21,10 +20,10 @@ export default function About({ about, projects, skills, blogs }: TAboutProps) {
   const { data: link } = useGetLink('67bb2077af9ba724ceece4ec');
 
   return (
-    <section className="w-full py-12">
-      <div className="container mx-auto px-4 relative">
+    <section className='w-full py-10 md:py-12'>
+      <div className='container mx-auto px-4 relative'>
         <GridBackgrounds />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-center'>
           {/* <motion.div
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -44,66 +43,54 @@ export default function About({ about, projects, skills, blogs }: TAboutProps) {
               )}
             </div>
           </motion.div> */}
-          <SkewedCardWithFloatingElements />
+          <div className='md:scale-[1.05]'>
+            <SkewedCardWithFloatingElements />
+          </div>
 
           {/* Text Section */}
           <motion.div
             initial={{ x: 50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="space-y-6"
+            className='space-y-5 md:space-y-6'
           >
-            <h3 className="text-2xl md:text-3xl font-bold">{about.title}</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-2">
+            <h3 className='text-3xl md:text-4xl font-bold'>{about.title}</h3>
+            <p className='text-base md:text-lg text-gray-600 dark:text-gray-300 flex items-center gap-2'>
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-purple-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-5 w-5 text-purple-600'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
                   strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z'
                 />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' />
               </svg>
               <span>Address: {about.address + ', ' + about.country}</span>
             </p>
-            <div className="p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
-              <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
-                {about.description}
-              </p>
+            <div className='p-5 md:p-0 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300'>
+              <p className='text-gray-700 dark:text-gray-200 text-base md:text-lg leading-normal md:leading-relaxed'>{about.description}</p>
             </div>
 
             {/* Achievements Section */}
-            <div className="mt-8">
-              <AchievementsSection
-                projects={projects}
-                skills={skills}
-                blogs={blogs}
-              />
+            <div className='mt-6'>
+              <AchievementsSection projects={projects} skills={skills} blogs={blogs} />
             </div>
 
             {/* Download CV Button */}
-            <div className="mt-8">
+            <div className='mt-6'>
               <AnimatedButton
-                bgColor="bg-transparent"
-                borderColor="border-warning-500 my-5"
-                href={
-                  link?.data?.resume ||
-                  'https://drive.google.com/file/d/15OqqkOMwSooI_iuQhrb7bCAQLEGug-sN/view?usp=drive_link'
-                }
-                target="_blank"
-                text="View Resume"
-                textColor="text-warning"
+                bgColor='bg-transparent'
+                borderColor='border-warning-500 my-4'
+                href={link?.data?.resume || 'https://drive.google.com/file/d/15OqqkOMwSooI_iuQhrb7bCAQLEGug-sN/view?usp=drive_link'}
+                target='_blank'
+                text='View Resume'
+                textColor='text-warning'
               />
             </div>
           </motion.div>
