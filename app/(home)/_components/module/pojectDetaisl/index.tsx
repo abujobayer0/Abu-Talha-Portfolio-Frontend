@@ -12,15 +12,7 @@ import DOMPurify from 'dompurify';
 import Link from 'next/link';
 import { findRelatedProjects } from '@/utils/findRelatedProjects';
 
-export default function ProjectDetails({
-  project,
-  projects,
-  currentId,
-}: {
-  project: TProject;
-  projects: TProject[];
-  currentId: string;
-}) {
+export default function ProjectDetails({ project, projects, currentId }: { project: TProject; projects: TProject[]; currentId: string }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { images, title, description, technologies, live, github } = project;
   const relatedProjects = findRelatedProjects(projects, currentId);
@@ -44,11 +36,7 @@ export default function ProjectDetails({
     return parse(sanitizedContent, {
       trim: true,
       replace: (domNode) => {
-        if (
-          domNode.type === 'tag' &&
-          domNode.name === 'p' &&
-          domNode.children?.length === 0
-        ) {
+        if (domNode.type === 'tag' && domNode.name === 'p' && domNode.children?.length === 0) {
           return <br />;
         }
         return undefined;
@@ -114,39 +102,31 @@ export default function ProjectDetails({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-8"
-      >
+    <div className='max-w-7xl mx-auto px-4 py-8'>
+      <motion.div initial='hidden' animate='visible' variants={containerVariants} className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
         {/* Main Content Area (Left and Middle) */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className='lg:col-span-2 space-y-8'>
           {/* Image Gallery - Full Width at Top */}
-          <motion.div
-            className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-black shadow-xl"
-            variants={itemVariants}
-          >
+          <motion.div className='relative aspect-[16/9] rounded-2xl overflow-hidden bg-black shadow-xl' variants={itemVariants}>
             {/* Main Image with Animation */}
-            <div className="relative w-full h-full">
+            <div className='relative w-full h-full'>
               <AnimatePresence initial={false} custom={direction}>
                 <motion.div
                   key={currentImageIndex}
                   custom={direction}
                   variants={imageVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="absolute inset-0"
+                  initial='enter'
+                  animate='center'
+                  exit='exit'
+                  className='absolute inset-0'
                 >
                   <Image
                     src={images[currentImageIndex]}
                     alt={`${title} - image ${currentImageIndex + 1}`}
                     fill
                     priority
-                    sizes="(max-width: 1024px) 100vw, 66vw"
-                    className="object-cover"
+                    sizes='(max-width: 1024px) 100vw, 66vw'
+                    className='object-cover'
                   />
                 </motion.div>
               </AnimatePresence>
@@ -154,46 +134,46 @@ export default function ProjectDetails({
               {/* Image Navigation Controls */}
               <button
                 onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-all z-10"
-                aria-label="Previous image"
+                className='absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-all z-10'
+                aria-label='Previous image'
               >
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='24'
+                  height='24'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
                 >
-                  <path d="m15 18-6-6 6-6" />
+                  <path d='m15 18-6-6 6-6' />
                 </svg>
               </button>
 
               <button
                 onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-all z-10"
-                aria-label="Next image"
+                className='absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-all z-10'
+                aria-label='Next image'
               >
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='24'
+                  height='24'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
                 >
-                  <path d="m9 18 6-6-6-6" />
+                  <path d='m9 18 6-6-6-6' />
                 </svg>
               </button>
 
               {/* Image Pagination Indicator */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+              <div className='absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10'>
                 {images.map((_, index) => (
                   <button
                     key={index}
@@ -201,11 +181,7 @@ export default function ProjectDetails({
                       setDirection(index > currentImageIndex ? 1 : -1);
                       setCurrentImageIndex(index);
                     }}
-                    className={`w-2.5 h-2.5 rounded-full transition-all ${
-                      index === currentImageIndex
-                        ? 'bg-warning w-6'
-                        : 'bg-white/60'
-                    }`}
+                    className={`w-2.5 h-2.5 rounded-full transition-all ${index === currentImageIndex ? 'bg-warning w-6' : 'bg-white/60'}`}
                     aria-label={`Go to image ${index + 1}`}
                   />
                 ))}
@@ -214,59 +190,51 @@ export default function ProjectDetails({
           </motion.div>
 
           {/* Project Title and Technologies */}
-          <motion.div variants={itemVariants} className="space-y-4">
-            <div className="flex flex-wrap justify-between items-center gap-4">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-                {title}
-              </h1>
+          <motion.div variants={itemVariants} className='space-y-4'>
+            <div className='flex flex-wrap justify-between items-center gap-4'>
+              <h1 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-white'>{title}</h1>
 
-              <div className="flex flex-wrap gap-2">
+              <div className='flex flex-wrap gap-2'>
                 <AnimatedButton
-                  text="Live Demo"
-                  bgColor="bg-warning"
-                  textColor="text-white"
+                  text='Live Demo'
+                  bgColor='bg-warning'
+                  textColor='text-white'
                   href={live}
                   IconComponent={AiOutlineEye}
-                  shadowColor="shadow-lg shadow-warning/20"
+                  shadowColor='shadow-lg shadow-warning/20'
                 />
                 {github.frontend && (
                   <AnimatedButton
-                    text="GitHub"
-                    bgColor="bg-gray-800 dark:bg-gray-700"
-                    textColor="text-white"
+                    text='GitHub'
+                    bgColor='bg-gray-800 dark:bg-gray-700'
+                    textColor='text-white'
                     href={github.frontend}
                     IconComponent={FaGithub}
-                    shadowColor="shadow-md"
+                    shadowColor='shadow-md'
                   />
                 )}
                 {github.backend && (
                   <AnimatedButton
-                    text="Backend Repository"
-                    bgColor="bg-gray-800 dark:bg-gray-700"
-                    textColor="text-white"
+                    text='Backend Repository'
+                    bgColor='bg-gray-800 dark:bg-gray-700'
+                    textColor='text-white'
                     href={github.backend}
                     IconComponent={FaGithub}
-                    shadowColor="shadow-md"
+                    shadowColor='shadow-md'
                   />
                 )}
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className='flex flex-wrap gap-2'>
               {technologies.map((tech) => (
                 <motion.span
                   key={tech._id}
-                  className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-sm border border-gray-200 dark:border-gray-700"
+                  className='bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-sm border border-gray-200 dark:border-gray-700'
                   whileHover={{ scale: 1.05, y: -2 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                 >
-                  <Image
-                    src={tech.icon}
-                    alt={tech.name}
-                    width={18}
-                    height={18}
-                    className="rounded-full object-cover"
-                  />
+                  <Image src={tech.icon} alt={tech.name} width={18} height={18} className='rounded-full object-cover' />
                   {tech.name}
                 </motion.span>
               ))}
@@ -274,121 +242,92 @@ export default function ProjectDetails({
           </motion.div>
 
           {/* Project Description */}
-          <motion.div
-            className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl shadow-lg p-6 md:p-8"
-            variants={itemVariants}
-          >
-            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
-              Project Overview
-            </h2>
+          <motion.div className='bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl shadow-lg p-6 md:p-8' variants={itemVariants}>
+            <h2 className='text-2xl font-bold mb-4 text-gray-900 dark:text-white'>Project Overview</h2>
 
-            <div className="rich-content prose prose-lg dark:prose-invert max-w-none">
+            <div className='rich-content prose prose-lg dark:prose-invert max-w-none'>
               {typeof description === 'string' && description.includes('<') ? (
                 renderHtmlContent(description)
               ) : (
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {description}
-                </p>
+                <p className='text-gray-700 dark:text-gray-300 leading-relaxed'>{description}</p>
               )}
             </div>
           </motion.div>
         </div>
 
         {/* Related Projects Sidebar (Right) */}
-        <motion.div className="lg:col-span-1 space-y-6" variants={itemVariants}>
-          <div className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl shadow-lg p-6">
-            <div className="flex justify-between ">
-              <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-                More Projects
-              </h2>
+        <motion.div className='lg:col-span-1 space-y-6' variants={itemVariants}>
+          <div className='bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl shadow-lg p-6'>
+            <div className='flex justify-between '>
+              <h2 className='text-xl font-bold mb-4 text-gray-900 dark:text-white'>More Projects</h2>
               <Link href={'/projects'}>
-                <p className="hover:underline text-gray-500 cursor-pointer">
-                  view all
-                </p>
+                <p className='hover:underline text-gray-500 cursor-pointer'>view all</p>
               </Link>
             </div>
 
-            <div className="space-y-4">
+            <div className='space-y-4'>
               {relatedProjects.length > 0 ? (
                 relatedProjects.map((relatedProject) => (
-                  <Link
-                    href={`/project/${relatedProject._id}`}
-                    key={relatedProject._id}
-                    className="block"
-                  >
+                  <Link href={`/projects/${relatedProject._id}`} key={relatedProject._id} className='block'>
                     <motion.div
-                      className="group relative rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 hover:shadow-md transition-all"
+                      className='group relative rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 hover:shadow-md transition-all'
                       whileHover={{ y: -5 }}
                     >
-                      <div className="aspect-video relative">
+                      <div className='aspect-video relative'>
                         <Image
                           src={relatedProject.images[0]}
                           alt={relatedProject.title}
                           fill
-                          sizes="(max-width: 1024px) 100vw, 33vw"
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          sizes='(max-width: 1024px) 100vw, 33vw'
+                          className='object-cover group-hover:scale-105 transition-transform duration-500'
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
+                        <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity' />
                       </div>
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <h3 className="text-white font-semibold line-clamp-2">
-                          {relatedProject.title}
-                        </h3>
+                      <div className='absolute bottom-0 left-0 right-0 p-4'>
+                        <h3 className='text-white font-semibold line-clamp-2'>{relatedProject.title}</h3>
                       </div>
                     </motion.div>
                   </Link>
                 ))
               ) : (
-                <div className="py-8 flex flex-col items-center justify-center text-center">
-                  <div className="rounded-full bg-white/30 dark:bg-gray-800/30 backdrop-blur-md p-3 mb-3">
+                <div className='py-8 flex flex-col items-center justify-center text-center'>
+                  <div className='rounded-full bg-white/30 dark:bg-gray-800/30 backdrop-blur-md p-3 mb-3'>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-gray-500"
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='24'
+                      height='24'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      className='text-gray-500'
                     >
-                      <rect width="7" height="7" x="3" y="3" rx="1" />
-                      <rect width="7" height="7" x="14" y="3" rx="1" />
-                      <rect width="7" height="7" x="14" y="14" rx="1" />
-                      <rect width="7" height="7" x="3" y="14" rx="1" />
+                      <rect width='7' height='7' x='3' y='3' rx='1' />
+                      <rect width='7' height='7' x='14' y='3' rx='1' />
+                      <rect width='7' height='7' x='14' y='14' rx='1' />
+                      <rect width='7' height='7' x='3' y='14' rx='1' />
                     </svg>
                   </div>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    No related projects available
-                  </p>
+                  <p className='text-gray-500 dark:text-gray-400'>No related projects available</p>
                 </div>
               )}
             </div>
           </div>
 
           {/* Technology Breakdown */}
-          <div className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl shadow-lg p-6">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-              Technology Stack
-            </h2>
+          <div className='bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl shadow-lg p-6'>
+            <h2 className='text-xl font-bold mb-4 text-gray-900 dark:text-white'>Technology Stack</h2>
 
-            <div className="space-y-3">
+            <div className='space-y-3'>
               {technologies.map((tech) => (
-                <div key={tech._id} className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 p-1.5 flex items-center justify-center">
-                    <Image
-                      src={tech.icon}
-                      alt={tech.name}
-                      width={24}
-                      height={24}
-                      className="rounded-full object-cover"
-                    />
+                <div key={tech._id} className='flex items-center gap-3'>
+                  <div className='w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 p-1.5 flex items-center justify-center'>
+                    <Image src={tech.icon} alt={tech.name} width={24} height={24} className='rounded-full object-cover' />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900 dark:text-white">
-                      {tech.name}
-                    </h3>
+                    <h3 className='font-medium text-gray-900 dark:text-white'>{tech.name}</h3>
                   </div>
                 </div>
               ))}
