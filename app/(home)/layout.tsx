@@ -7,6 +7,7 @@ import Footer from './_components/footer';
 import { Navbar } from './_components/ui/navbar';
 import StatsRibbon from './_components/ui/statsRibbon';
 import PricingSection from './_components/ui/pricing';
+import ProcessSection from './_components/ui/processSection';
 
 interface CommonLayoutProps {
   children: ReactNode;
@@ -75,6 +76,9 @@ export default function CommonLayout({
               <PricingSection />
             </m.div>
           </section>{' '}
+          <section id='process' className='pt-16'>
+            <ProcessSection />
+          </section>
           <section id='skills' className='pt-16 min-h-[80vh]'>
             <m.div initial='hidden' whileInView='visible' viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
               {skills}
