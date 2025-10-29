@@ -66,7 +66,7 @@ export default function PricingSection() {
                   </span>
                   <span className='rounded-full bg-warning/90 px-2 py-0.5 text-[10px] font-semibold text-gray-50'>Popular</span>
                 </div>
-                <PriceTag amount='$25' />
+                <PriceTag amount='$15' />
                 <ul className='mt-4 space-y-2 text-sm text-purple-900 dark:text-purple-200'>
                   <li className='flex items-center gap-2'>
                     <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
@@ -111,7 +111,7 @@ export default function PricingSection() {
                 </ul>
                 <div className='mt-6'>
                   <Link
-                    href={'/contact?service=web&rate=25'}
+                    href={'/contact?service=web&rate=15'}
                     className='inline-flex items-center justify-center rounded-full bg-warning text-gray-50 font-semibold px-5 py-3 hover:opacity-90 transition'
                   >
                     Hire for Web
@@ -145,7 +145,7 @@ export default function PricingSection() {
                     Hourly
                   </span>
                 </div>
-                <PriceTag amount='$35' />
+                <PriceTag amount='$20' />
                 <ul className='mt-4 space-y-2 text-sm text-purple-900 dark:text-purple-200'>
                   <li className='flex items-center gap-2'>
                     <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
@@ -190,7 +190,7 @@ export default function PricingSection() {
                 </ul>
                 <div className='mt-6'>
                   <Link
-                    href={'/contact?service=mobile&rate=35'}
+                    href={'/contact?service=mobile&rate=20'}
                     className='inline-flex items-center justify-center rounded-full border border-purple-400/30 text-purple-900 dark:text-purple-50 font-semibold px-5 py-3 bg-white/30 hover:bg-white/40 transition'
                   >
                     Hire for Mobile
@@ -225,7 +225,7 @@ export default function PricingSection() {
                   </span>
                   <span className='rounded-full bg-green-500/90 px-2 py-0.5 text-[10px] font-semibold text-gray-50'>Best Value</span>
                 </div>
-                <PriceTag amount='$4000' suffix='/mo' />
+                <PriceTag amount='$2400' suffix='/mo' />
                 <ul className='mt-4 space-y-2 text-sm text-purple-900 dark:text-purple-200'>
                   <li className='flex items-center gap-2'>
                     <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
@@ -270,7 +270,7 @@ export default function PricingSection() {
                 </ul>
                 <div className='mt-6'>
                   <Link
-                    href={'/contact?service=monthly&rate=4000'}
+                    href={'/contact?service=monthly&rate=2400'}
                     className='inline-flex items-center justify-center rounded-full bg-green-500 text-gray-50 font-semibold px-5 py-3 hover:opacity-90 transition'
                   >
                     Hire Monthly
