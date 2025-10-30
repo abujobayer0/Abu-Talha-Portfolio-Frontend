@@ -37,6 +37,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ isOpen, onClose }) => {
   const blogs: TBlog[] = blogsData?.data || [];
   const projects: TProject[] = projectsData?.data || [];
 
+  const stripHtmlAndExcerpt = (text: string | undefined, maxLength: number = 120): string => {
+    if (!text) return '';
+    const stripped = text.replace(/<[^>]*>/g, ''); // Remove HTML tags
+    const excerpt = stripped.substring(0, maxLength);
+    return excerpt + (stripped.length > maxLength ? '...' : '');
+  };
+
   // Filter and search results
   const searchResults = useMemo(() => {
     if (!searchQuery.trim() || searchQuery.length < 2) return [];
@@ -50,14 +57,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ isOpen, onClose }) => {
       const matchesContent = blog.content?.toLowerCase().includes(query);
 
       if (matchesTitle || matchesContent) {
-        const contentText = blog.content?.replace(/<[^>]*>/g, '') || ''; // Remove HTML tags
-        const excerpt = contentText.substring(0, 120);
-
         results.push({
           id: blog._id,
           type: 'blog',
           title: blog.title || 'Untitled Blog',
-          description: excerpt + (contentText.length > 120 ? '...' : ''),
+          description: stripHtmlAndExcerpt(blog.content),
           image: blog.imageUrl,
           url: `/blogs/${blog._id}`,
           date: blog.createdAt,
@@ -76,7 +80,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isOpen, onClose }) => {
           id: project._id,
           type: 'project',
           title: project.title || 'Untitled Project',
-          description: (project.description || '').substring(0, 120) + ((project.description?.length || 0) > 120 ? '...' : ''),
+          description: stripHtmlAndExcerpt(project.description),
           image: project.images?.[0],
           url: `/projects/${project._id}`,
         });
