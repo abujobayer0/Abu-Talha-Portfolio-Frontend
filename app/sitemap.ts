@@ -15,26 +15,40 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     const [blogsRes, projectsRes] = await Promise.all([
-      getAllBlogs({ limit: 1000, sort: '-updatedAt' }),
-      getAllProjects({ limit: 1000, sort: '-updatedAt' }),
+      getAllBlogs({ limit: 5000, sort: '-updatedAt' }),
+      getAllProjects({ limit: 5000, sort: '-updatedAt' }),
     ]);
 
     const blogs = blogsRes?.data || [];
     const projects = projectsRes?.data || [];
 
-    const blogEntries: MetadataRoute.Sitemap = blogs.map((b: any) => ({
-      url: `${base}/blogs/${b._id}`,
-      lastModified: new Date(b.updatedAt || b.createdAt || Date.now()),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    }));
+    const blogEntries: MetadataRoute.Sitemap = blogs.map((b: any) => {
+      const img = b.thumbnail || b.image || b.cover || b.banner;
+      const entry: any = {
+        url: `${base}/blogs/${b._id}`,
+        lastModified: new Date(b.updatedAt || b.createdAt || Date.now()),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      };
+      if (typeof img === 'string') {
+        entry.images = [img];
+      }
+      return entry;
+    });
 
-    const projectEntries: MetadataRoute.Sitemap = projects.map((p: any) => ({
-      url: `${base}/projects/${p._id}`,
-      lastModified: new Date(p.updatedAt || p.createdAt || Date.now()),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }));
+    const projectEntries: MetadataRoute.Sitemap = projects.map((p: any) => {
+      const img = p.thumbnail || p.image || p.cover || p.banner;
+      const entry: any = {
+        url: `${base}/projects/${p._id}`,
+        lastModified: new Date(p.updatedAt || p.createdAt || Date.now()),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      };
+      if (typeof img === 'string') {
+        entry.images = [img];
+      }
+      return entry;
+    });
 
     return [...staticRoutes, ...blogEntries, ...projectEntries];
   } catch {
