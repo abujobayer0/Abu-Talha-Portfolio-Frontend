@@ -16,10 +16,19 @@ export async function generateStaticParams() {
     const data = await getAllBlogs({ limit: 100 });
     const blogs = data?.data || [];
 
-    return blogs?.slice(0, 20)?.map((blog: any) => ({
-      blogId: blog._id,
-    }));
+    // Safe guard against invalid data structure
+    if (!Array.isArray(blogs)) {
+      return [];
+    }
+
+    return blogs
+      .filter((blog: any) => blog && blog._id) // Filter out invalid entries
+      .slice(0, 20)
+      .map((blog: any) => ({
+        blogId: blog._id,
+      }));
   } catch (error) {
+    console.error('Error in generateStaticParams for blogs:', error);
     // Fallback to empty array if API is unavailable at build time
     return [];
   }
@@ -35,10 +44,10 @@ export async function generateMetadata({ params }: { params: { blogId: string } 
     blog = null;
   }
 
-  const baseUrl = siteConfig.url.replace(/\/$/, '');
+  const baseUrl = siteConfig?.url?.replace(/\/$/, '') || 'https://www.apexpropdesign.com';
   const canonical = `${baseUrl}/blogs/${params.blogId}`;
 
-  const defaultTitle = `Blog Post | ${siteConfig.name}`;
+  const defaultTitle = `Blog Post | ${siteConfig?.name || 'Abu Talha'}`;
   const defaultDescription = 'Read our latest blog post.';
 
   return {
@@ -63,7 +72,9 @@ export async function generateMetadata({ params }: { params: { blogId: string } 
           ]
         : [
             {
-              url: siteConfig?.ogImage,
+              url:
+                siteConfig?.ogImage ||
+                'https://i.ibb.co.com/wF9NWgf8/Building-websites-at-affordable-prices-is-a-valuable-service-that-caters-to-small-businesses-startup.png',
               width: 1200,
               height: 630,
               alt: defaultTitle,
@@ -74,7 +85,12 @@ export async function generateMetadata({ params }: { params: { blogId: string } 
       card: 'summary_large_image',
       title: blog?.title || defaultTitle,
       description: blog?.content?.replace(/<[^>]+>/g, '')?.slice(0, 160) || defaultDescription,
-      images: blog?.imageUrl ? [blog.imageUrl] : [siteConfig.ogImage],
+      images: blog?.imageUrl
+        ? [blog.imageUrl]
+        : [
+            siteConfig?.ogImage ||
+              'https://i.ibb.co.com/wF9NWgf8/Building-websites-at-affordable-prices-is-a-valuable-service-that-caters-to-small-businesses-startup.png',
+          ],
     },
     authors: blog?.author?.name ? [{ name: blog.author.name }] : undefined,
     robots: { index: true, follow: true },
@@ -92,47 +108,51 @@ export default async function BlogDetailsPage({ params }: { params: { blogId: st
     blog = null;
   }
 
-  const baseUrl = siteConfig.url.replace(/\/$/, '');
+  const baseUrl = siteConfig?.url?.replace(/\/$/, '') || 'https://www.apexpropdesign.com';
   const canonical = `${baseUrl}/blogs/${params.blogId}`;
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': canonical,
-    },
-    headline: blog?.title,
-    description: blog?.content?.replace(/<[^>]+>/g, '')?.slice(0, 200),
-    image: [blog?.imageUrl].filter(Boolean),
-    datePublished: blog?.createdAt,
-    dateModified: blog?.updatedAt || blog?.createdAt,
-    author: blog?.author?.name
-      ? {
-          '@type': 'Person',
-          name: blog.author.name,
-          url: siteConfig.url,
-        }
-      : {
-          '@type': 'Person',
-          name: 'Abu Talha Md Jobayer',
-          url: siteConfig.url,
+  const jsonLd = blog
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': canonical,
         },
-    publisher: {
-      '@type': 'Organization',
-      name: siteConfig.name,
-      url: siteConfig.url,
-      logo: {
-        '@type': 'ImageObject',
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-      },
-    },
-    articleSection: 'Technology',
-    keywords: blog?.title ? blog.title.split(/\s+/)?.join(', ') : 'Web Development, Technology',
-    inLanguage: 'en-US',
-  };
+        headline: blog?.title,
+        description: blog?.content?.replace(/<[^>]+>/g, '')?.slice(0, 200),
+        image: [blog?.imageUrl].filter(Boolean),
+        datePublished: blog?.createdAt,
+        dateModified: blog?.updatedAt || blog?.createdAt,
+        author: blog?.author?.name
+          ? {
+              '@type': 'Person',
+              name: blog.author.name,
+              url: siteConfig.url,
+            }
+          : {
+              '@type': 'Person',
+              name: 'Abu Talha Md Jobayer',
+              url: siteConfig?.url || 'https://www.apexpropdesign.com',
+            },
+        publisher: {
+          '@type': 'Organization',
+          name: siteConfig?.name || 'Abu Talha',
+          url: siteConfig?.url || 'https://www.apexpropdesign.com',
+          logo: {
+            '@type': 'ImageObject',
+            url:
+              siteConfig?.ogImage ||
+              'https://i.ibb.co.com/wF9NWgf8/Building-websites-at-affordable-prices-is-a-valuable-service-that-caters-to-small-businesses-startup.png',
+            width: 1200,
+            height: 630,
+          },
+        },
+        articleSection: 'Technology',
+        keywords: blog?.title ? blog.title.split(/\s+/)?.join(', ') : 'Web Development, Technology',
+        inLanguage: 'en-US',
+      }
+    : null;
 
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
@@ -163,7 +183,9 @@ export default async function BlogDetailsPage({ params }: { params: { blogId: st
     <div className='bg-background min-h-screen'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10'>
         <BackHeader />
-        <script type='application/ld+json' suppressHydrationWarning dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        {jsonLd && (
+          <script type='application/ld+json' suppressHydrationWarning dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        )}
         <script
           type='application/ld+json'
           suppressHydrationWarning

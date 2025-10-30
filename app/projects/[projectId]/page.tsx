@@ -19,10 +19,19 @@ export async function generateStaticParams() {
     const data = await getAllProjects({ limit: 100 });
     const projects = data?.data || [];
 
-    return projects.slice(0, 20).map((project: any) => ({
-      projectId: project._id,
-    }));
+    // Safe guard against invalid data structure
+    if (!Array.isArray(projects)) {
+      return [];
+    }
+
+    return projects
+      .filter((project: any) => project && project._id) // Filter out invalid entries
+      .slice(0, 20)
+      .map((project: any) => ({
+        projectId: project._id,
+      }));
   } catch (error) {
+    console.error('Error in generateStaticParams for projects:', error);
     // Fallback to empty array if API is unavailable at build time
     return [];
   }
@@ -43,36 +52,38 @@ export default async function ProjectDetailsPage({ params }: TDetailsParams) {
     projects = [];
   }
 
-  const baseUrl = siteConfig.url.replace(/\/$/, '');
+  const baseUrl = siteConfig?.url?.replace(/\/$/, '') || 'https://www.apexpropdesign.com';
   const canonical = `${baseUrl}/projects/${projectId}`;
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: project?.title,
-    description: project?.description?.replace(/<[^>]+>/g, '')?.slice(0, 200),
-    url: canonical,
-    image: (project?.images || []).slice(0, 1),
-    datePublished: project?.createdAt,
-    dateModified: project?.updatedAt || project?.createdAt,
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Web',
-    author: {
-      '@type': 'Person',
-      name: 'Abu Talha Md Jobayer',
-      url: siteConfig.url,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-  };
+  const jsonLd = project
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: project?.title || 'Project',
+        description: project?.description?.replace(/<[^>]+>/g, '')?.slice(0, 200) || 'View project details',
+        url: canonical,
+        image: Array.isArray(project?.images) && project.images.length > 0 ? project.images.slice(0, 1) : [],
+        datePublished: project?.createdAt,
+        dateModified: project?.updatedAt || project?.createdAt,
+        applicationCategory: 'WebApplication',
+        operatingSystem: 'Web',
+        author: {
+          '@type': 'Person',
+          name: 'Abu Talha Md Jobayer',
+          url: siteConfig?.url || 'https://www.apexpropdesign.com',
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: siteConfig?.name || 'Abu Talha',
+          url: siteConfig?.url || 'https://www.apexpropdesign.com',
+        },
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+      }
+    : null;
 
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
@@ -110,13 +121,15 @@ export default async function ProjectDetailsPage({ params }: TDetailsParams) {
             </p>
           </div>
         ) : null}
-        <script
-          type='application/ld+json'
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd),
-          }}
-        />
+        {jsonLd && (
+          <script
+            type='application/ld+json'
+            suppressHydrationWarning
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(jsonLd),
+            }}
+          />
+        )}
         <script
           type='application/ld+json'
           suppressHydrationWarning
