@@ -32,15 +32,8 @@ export default async function BlogsPage({ searchParams }: BlogsSectionProps) {
   return (
     <div>
       <Blogs blogs={blogs} />
+
       <PaginationControls currentPage={currentPage} totalPages={totalPages} />
-      <div className='flex justify-center'>
-        <Link
-          href='/blogs'
-          className='inline-flex items-center px-5 py-2 rounded-full border border-warning-500 text-warning hover:bg-warning-500/10 transition-colors'
-        >
-          Browse all blogs
-        </Link>
-      </div>
     </div>
   );
 }

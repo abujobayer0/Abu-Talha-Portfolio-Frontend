@@ -1,5 +1,5 @@
 export type SiteConfig = typeof siteConfig;
-import { FaUser, FaLaptopCode, FaGraduationCap, FaProjectDiagram, FaBlog, FaHome } from 'react-icons/fa';
+import { User, Code2, GraduationCap, FolderKanban, Briefcase, Newspaper, Home } from 'lucide-react';
 
 export const siteConfig = {
   name: 'Abu Talha — Web & Mobile Development',
@@ -114,19 +114,19 @@ export const siteConfig = {
   navItems: [
     {
       label: 'Home',
-      href: '#home',
+      href: '/#home',
     },
     {
       label: 'Skills',
-      href: '#skills',
+      href: '/#skills',
     },
     {
       label: 'Experience',
-      href: '#experience',
+      href: '/#experience',
     },
     {
       label: 'About',
-      href: '#about',
+      href: '/#about',
     },
     {
       label: 'Projects',
@@ -143,35 +143,35 @@ export const siteConfig = {
   ],
 
   dashboardMenuItems: [
-    { name: 'Profile', icon: FaUser, path: '/dashboard' },
+    { name: 'Profile', icon: User, path: '/dashboard' },
     {
       name: 'Skills Management',
-      icon: FaLaptopCode,
+      icon: Code2,
       path: '/dashboard/skills-management',
     },
     {
       name: 'Projects Management',
-      icon: FaProjectDiagram,
+      icon: FolderKanban,
       path: '/dashboard/projects-management',
     },
     {
       name: 'Education Management',
-      icon: FaGraduationCap,
+      icon: GraduationCap,
       path: '/dashboard/education-management',
     },
     {
       name: 'Experience Management',
-      icon: FaUser,
+      icon: Briefcase,
       path: '/dashboard/experience-management',
     },
     {
       name: 'Blogs Management',
-      icon: FaBlog,
+      icon: Newspaper,
       path: '/dashboard/blogs-management',
     },
     {
       name: 'Home',
-      icon: FaHome,
+      icon: Home,
       path: '/',
     },
   ],

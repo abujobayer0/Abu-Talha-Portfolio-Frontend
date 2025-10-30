@@ -24,6 +24,7 @@ import SearchBar from './searchBar';
 import { siteConfig } from '@/config/site';
 import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/button';
+import Link from 'next/link';
 
 const underlineVariants = {
   initial: { width: 0 },
@@ -38,6 +39,15 @@ export const Navbar = ({ activeSection = '' }) => {
   const [shouldHideOnScroll, setShouldHideOnScroll] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Map specific section hrefs to dedicated pages
+  const pageRouteByHref: Record<string, string> = {
+    '#projects': '/projects',
+    '#blogs': '/blogs',
+    '#contact': '/contact',
+  };
+
+  const isPageRoute = (href: string) => Object.prototype.hasOwnProperty.call(pageRouteByHref, href);
 
   // Register scroll events
   useEffect(() => {
@@ -54,7 +64,12 @@ export const Navbar = ({ activeSection = '' }) => {
   const handleLinkClick = () => {
     setShouldHideOnScroll(false);
     setIsMenuOpen(false);
-    router.push('/');
+  };
+
+  const handleNavigateToPage = (path: string) => {
+    setShouldHideOnScroll(false);
+    setIsMenuOpen(false);
+    router.push(path);
   };
 
   return (
@@ -76,22 +91,24 @@ export const Navbar = ({ activeSection = '' }) => {
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <motion.div animate='animate' initial='initial' variants={linkVariants} whileHover='whileHover' className='relative'>
-                <ScrollLink
-                  className={clsx(
-                    'cursor-pointer text-default-800 hover:text-warning',
-                    activeSection === item.href.substring(1) && 'text-warning font-medium'
-                  )}
-                  color='black'
-                  duration={500}
-                  offset={-90}
-                  smooth={true}
-                  spy={true}
-                  activeClass='active'
-                  to={item.href.substring(1)}
-                  onClick={handleLinkClick}
-                >
-                  {item.label}
-                </ScrollLink>
+                {isPageRoute(item.href) ? (
+                  <button
+                    className={clsx('cursor-pointer text-default-800 hover:text-warning')}
+                    onClick={() => handleNavigateToPage(pageRouteByHref[item.href])}
+                  >
+                    {item.label}
+                  </button>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className={clsx(
+                      'cursor-pointer text-default-800 hover:text-warning',
+                      activeSection === item.href.substring(1) && 'text-warning font-medium'
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                )}
                 {/* Animated underline */}
                 <motion.div
                   className='absolute left-0 bottom-[-2px] h-[2px] bg-warning'
@@ -169,18 +186,30 @@ export const Navbar = ({ activeSection = '' }) => {
           {siteConfig.navItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <motion.div animate='animate' initial='initial' variants={linkVariants} whileHover='whileHover' className='relative'>
-                <ScrollLink
-                  className={clsx('cursor-pointer text-foreground', activeSection === item.href.substring(1) && 'text-warning font-medium')}
-                  duration={500}
-                  offset={-70}
-                  smooth={true}
-                  spy={true}
-                  activeClass='active'
-                  to={item.href.substring(1)}
-                  onClick={handleLinkClick}
-                >
-                  {item.label}
-                </ScrollLink>
+                {isPageRoute(item.href) ? (
+                  <button
+                    className={clsx('cursor-pointer text-foreground')}
+                    onClick={() => handleNavigateToPage(pageRouteByHref[item.href])}
+                  >
+                    {item.label}
+                  </button>
+                ) : (
+                  <ScrollLink
+                    className={clsx(
+                      'cursor-pointer text-foreground',
+                      activeSection === item.href.substring(1) && 'text-warning font-medium'
+                    )}
+                    duration={500}
+                    offset={-70}
+                    smooth={true}
+                    spy={true}
+                    activeClass='active'
+                    to={item.href.substring(1)}
+                    onClick={handleLinkClick}
+                  >
+                    {item.label}
+                  </ScrollLink>
+                )}
                 {/* Animated underline */}
                 <motion.div
                   className='absolute left-0 bottom-[-2px] h-[2px] bg-warning'

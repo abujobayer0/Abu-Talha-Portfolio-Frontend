@@ -32,6 +32,14 @@ export default function Blogs({ blogs }: TBlogsProps) {
   return (
     <div className='py-12'>
       <Title title1='Blogs' title2='My Blogs' />
+      <div className='flex justify-center'>
+        <Link
+          href='/blogs'
+          className='inline-flex items-center mx-auto rounded-full bg-warning px-4 py-2 text-white transition-colors hover:opacity-90'
+        >
+          Browse all blogs
+        </Link>
+      </div>
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-10'>
         {blogs.map((blog, index) => (
           <CommonBlogCard key={blog._id} index={index} blog={blog} />

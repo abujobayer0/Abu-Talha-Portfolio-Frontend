@@ -14,7 +14,7 @@ const roleBasedRoutes = {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const accessToken = request.cookies.get('accessToken')?.value;
+  const accessToken = request.cookies.get('pa.token')?.value;
 
   // Allow unauthenticated access to auth routes
   if (AuthRoutes.some((route) => pathname === route || pathname.startsWith(route + '/'))) {

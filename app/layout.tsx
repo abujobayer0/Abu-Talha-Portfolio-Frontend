@@ -8,6 +8,7 @@ import Container from './(home)/_components/ui/container';
 import { Analytics } from '@vercel/analytics/next';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/config/fonts';
+import ClickSpark from './(home)/_components/Click';
 
 export const metadata: Metadata = {
   title: {
@@ -263,7 +264,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           {/* Main content layout */}
           <Container>
-            {children}
+            <ClickSpark>{children}</ClickSpark>
             <Analytics />
           </Container>
         </Providers>

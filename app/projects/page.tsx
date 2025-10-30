@@ -60,7 +60,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
     data = await getAllProjects({
       limit,
       page: currentPage,
-      sort: '-createdAt',
+      sort: '-updatedAt',
     });
   } catch (e) {
     // Graceful fallback when API is unavailable in production

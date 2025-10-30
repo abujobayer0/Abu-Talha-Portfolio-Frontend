@@ -60,7 +60,7 @@ export async function fetchServer(
 
   // Use the same auth pattern as axios instance (from cookies)
   const cookieStore = cookies();
-  const accessToken = cookieStore.get('accessToken')?.value;
+  const accessToken = cookieStore.get('pa.token')?.value;
 
   // Prepare fetch options with Next.js caching
   const fetchOptions: RequestInit & { next?: { tags?: string[]; revalidate?: number | false } } = {

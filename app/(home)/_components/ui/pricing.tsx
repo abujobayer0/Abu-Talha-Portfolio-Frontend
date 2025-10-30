@@ -6,6 +6,7 @@ import { siteConfig } from '@/config/site';
 import { motion } from 'framer-motion';
 import GridBackgrounds from '@/components/common/backgrounds/grid';
 import { Title } from './title';
+import ElectricBorder from '../ElectricBorder';
 
 function PriceTag({ amount, suffix = '/hr' }: { amount: string; suffix?: string }) {
   return (
@@ -219,86 +220,89 @@ export default function PricingSection() {
               </div>
             </div>
           </motion.div>
+          <ElectricBorder color='#ff0080' speed={0.5} chaos={5} thickness={2}>
+            {/* Monthly Hire */}
+            <motion.div
+              initial='hidden'
+              whileInView='visible'
+              viewport={{ once: true, amount: 0.2 }}
+              variants={cardVariants}
+              className='group relative cursor-pointer'
+            >
+              <div className='group relative bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl overflow-hidden border border-purple-100 dark:border-purple-900 shadow-lg hover:shadow-purple-300/30 hover:ring-2 hover:ring-purple-400/50 transition-all duration-300 p-6 md:p-8'>
+                {/* Animated glow background on hover */}
+                <motion.div
+                  className='absolute inset-0 rounded-2xl z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300'
+                  style={{
+                    background: 'radial-gradient(circle at top left, rgba(168, 85, 247, 0.1), transparent)',
+                  }}
+                />
 
-          {/* Monthly Hire */}
-          <motion.div
-            initial='hidden'
-            whileInView='visible'
-            viewport={{ once: true, amount: 0.2 }}
-            variants={cardVariants}
-            className='group relative cursor-pointer'
-          >
-            <div className='group relative bg-white/30 dark:bg-gray-800/30 backdrop-blur-md rounded-2xl overflow-hidden border border-purple-100 dark:border-purple-900 shadow-lg hover:shadow-purple-300/30 hover:ring-2 hover:ring-purple-400/50 transition-all duration-300 p-6 md:p-8'>
-              {/* Animated glow background on hover */}
-              <motion.div
-                className='absolute inset-0 rounded-2xl z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300'
-                style={{
-                  background: 'radial-gradient(circle at top left, rgba(168, 85, 247, 0.1), transparent)',
-                }}
-              />
-
-              <div className='relative z-10'>
-                <div className='mb-3 flex items-center gap-2'>
-                  <span className='text-sm font-medium uppercase tracking-wide text-purple-900/80 dark:text-purple-200'>Monthly Hire</span>
-                  <span className='rounded-full bg-purple-100/50 px-2 py-0.5 text-[10px] font-semibold text-purple-50 border border-purple-400/30 backdrop-blur-md'>
-                    Full-time
-                  </span>
-                  <span className='rounded-full bg-green-500/90 px-2 py-0.5 text-[10px] font-semibold text-gray-50'>Best Value</span>
-                </div>
-                <PriceTag amount={`${currencySymbol}${plans.find((p) => p.id === 'monthly')?.price ?? 2400}`} suffix='/mo' />
-                <ul className='mt-4 space-y-2 text-sm text-purple-900 dark:text-purple-200'>
-                  <li className='flex items-center gap-2'>
-                    <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
-                      <path
-                        fillRule='evenodd'
-                        d='M16.707 5.293a1 1 0 010 1.414l-7.071 7.071a1 1 0 01-1.414 0L3.293 9.95a1 1 0 011.414-1.414l3.101 3.101 6.364-6.364a1 1 0 011.535.02z'
-                        clipRule='evenodd'
-                      />
-                    </svg>
-                    Full-stack development
-                  </li>
-                  <li className='flex items-center gap-2'>
-                    <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
-                      <path
-                        fillRule='evenodd'
-                        d='M16.707 5.293a1 1 0 010 1.414l-7.071 7.071a1 1 0 01-1.414 0L3.293 9.95a1 1 0 011.414-1.414l3.101 3.101 6.364-6.364a1 1 0 011.535.02z'
-                        clipRule='evenodd'
-                      />
-                    </svg>
-                    40 hours/week commitment
-                  </li>
-                  <li className='flex items-center gap-2'>
-                    <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
-                      <path
-                        fillRule='evenodd'
-                        d='M16.707 5.293a1 1 0 010 1.414l-7.071 7.071a1 1 0 01-1.414 0L3.293 9.95a1 1 0 011.414-1.414l3.101 3.101 6.364-6.364a1 1 0 011.535.02z'
-                        clipRule='evenodd'
-                      />
-                    </svg>
-                    Priority support & communication
-                  </li>
-                  <li className='flex items-center gap-2'>
-                    <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
-                      <path
-                        fillRule='evenodd'
-                        d='M16.707 5.293a1 1 0 010 1.414l-7.071 7.071a1 1 0 01-1.414 0L3.293 9.95a1 1 0 011.414-1.414l3.101 3.101 6.364-6.364a1 1 0 011.535.02z'
-                        clipRule='evenodd'
-                      />
-                    </svg>
-                    Architecture & code reviews
-                  </li>
-                </ul>
-                <div className='mt-6'>
-                  <Link
-                    href={plans.find((p) => p.id === 'monthly')?.ctaHref || '/contact?service=monthly&rate=2400'}
-                    className='inline-flex items-center justify-center rounded-full bg-green-500 text-gray-50 font-semibold px-5 py-3 hover:opacity-90 transition'
-                  >
-                    Hire Monthly
-                  </Link>
+                <div className='relative z-10'>
+                  <div className='mb-3 flex items-center gap-2'>
+                    <span className='text-sm font-medium uppercase tracking-wide text-purple-900/80 dark:text-purple-200'>
+                      Monthly Hire
+                    </span>
+                    <span className='rounded-full bg-purple-100/50 px-2 py-0.5 text-[10px] font-semibold text-purple-50 border border-purple-400/30 backdrop-blur-md'>
+                      Full-time
+                    </span>
+                    <span className='rounded-full bg-green-500/90 px-2 py-0.5 text-[10px] font-semibold text-gray-50'>Best Value</span>
+                  </div>
+                  <PriceTag amount={`${currencySymbol}${plans.find((p) => p.id === 'monthly')?.price ?? 2400}`} suffix='/mo' />
+                  <ul className='mt-4 space-y-2 text-sm text-purple-900 dark:text-purple-200'>
+                    <li className='flex items-center gap-2'>
+                      <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
+                        <path
+                          fillRule='evenodd'
+                          d='M16.707 5.293a1 1 0 010 1.414l-7.071 7.071a1 1 0 01-1.414 0L3.293 9.95a1 1 0 011.414-1.414l3.101 3.101 6.364-6.364a1 1 0 011.535.02z'
+                          clipRule='evenodd'
+                        />
+                      </svg>
+                      Full-stack development
+                    </li>
+                    <li className='flex items-center gap-2'>
+                      <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
+                        <path
+                          fillRule='evenodd'
+                          d='M16.707 5.293a1 1 0 010 1.414l-7.071 7.071a1 1 0 01-1.414 0L3.293 9.95a1 1 0 011.414-1.414l3.101 3.101 6.364-6.364a1 1 0 011.535.02z'
+                          clipRule='evenodd'
+                        />
+                      </svg>
+                      40 hours/week commitment
+                    </li>
+                    <li className='flex items-center gap-2'>
+                      <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
+                        <path
+                          fillRule='evenodd'
+                          d='M16.707 5.293a1 1 0 010 1.414l-7.071 7.071a1 1 0 01-1.414 0L3.293 9.95a1 1 0 011.414-1.414l3.101 3.101 6.364-6.364a1 1 0 011.535.02z'
+                          clipRule='evenodd'
+                        />
+                      </svg>
+                      Priority support & communication
+                    </li>
+                    <li className='flex items-center gap-2'>
+                      <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
+                        <path
+                          fillRule='evenodd'
+                          d='M16.707 5.293a1 1 0 010 1.414l-7.071 7.071a1 1 0 01-1.414 0L3.293 9.95a1 1 0 011.414-1.414l3.101 3.101 6.364-6.364a1 1 0 011.535.02z'
+                          clipRule='evenodd'
+                        />
+                      </svg>
+                      Architecture & code reviews
+                    </li>
+                  </ul>
+                  <div className='mt-6'>
+                    <Link
+                      href={plans.find((p) => p.id === 'monthly')?.ctaHref || '/contact?service=monthly&rate=2400'}
+                      className='inline-flex items-center justify-center rounded-full bg-green-500 text-gray-50 font-semibold px-5 py-3 hover:opacity-90 transition'
+                    >
+                      Hire Monthly
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </ElectricBorder>
         </div>
 
         <div className='mt-8 text-center'>

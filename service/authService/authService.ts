@@ -1,19 +1,19 @@
-"use server";
+'use server';
 
-import { jwtDecode } from "jwt-decode";
-import { revalidateTag } from "next/cache";
-import { cookies } from "next/headers";
-import { FieldValues } from "react-hook-form";
+import { jwtDecode } from 'jwt-decode';
+import { revalidateTag } from 'next/cache';
+import { cookies } from 'next/headers';
+import { FieldValues } from 'react-hook-form';
 
-import { TAuthor } from "@/types";
-import axiosInstance from "@/lib/axiosInstance";
+import { TAuthor } from '@/types';
+import axiosInstance from '@/lib/axiosInstance';
 
 export const loginUser = async (userData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post("/users/login", userData);
+    const { data } = await axiosInstance.post('/users/login', userData);
 
     if (data.success) {
-      cookies().set("accessToken", data?.data?.accessToken);
+      cookies().set('pa.token', data?.data?.accessToken);
     }
 
     return data;
@@ -27,13 +27,13 @@ export const getAdmin = async () => {
   let fetchOptions = {};
 
   fetchOptions = {
-    cache: "no-store",
+    cache: 'no-store',
     next: {
-      tags: ["users"],
+      tags: ['users'],
     },
   };
 
-  const { data } = await axiosInstance.get("/users", { fetchOptions });
+  const { data } = await axiosInstance.get('/users', { fetchOptions });
 
   return data;
 };
@@ -43,7 +43,7 @@ export const editAdmin = async (adminData: Partial<TAuthor>) => {
   try {
     const { data } = await axiosInstance.patch(`/users`, adminData);
 
-    revalidateTag("users");
+    revalidateTag('users');
 
     return data;
   } catch (error: any) {
@@ -52,12 +52,12 @@ export const editAdmin = async (adminData: Partial<TAuthor>) => {
 };
 
 export const logout = () => {
-  cookies().delete("accessToken");
-  cookies().delete("refreshToken");
+  cookies().delete('pa.token');
+  cookies().delete('refreshToken');
 };
 
 export const getCurrentUser = async () => {
-  const accessToken = cookies().get("accessToken")?.value;
+  const accessToken = cookies().get('pa.token')?.value;
 
   let decodedToken = null;
 
