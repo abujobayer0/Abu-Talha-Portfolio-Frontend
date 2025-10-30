@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   description: 'Explore client projects and case studies',
 };
 
+// Enable ISR: revalidate every hour
+export const revalidate = 3600;
+
 interface ProjectsPageProps {
   searchParams: {
     page?: string;

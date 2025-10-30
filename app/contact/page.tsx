@@ -36,6 +36,9 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+// Static page - no revalidation needed
+export const revalidate = false;
+
 export default function ContactPage() {
   const baseUrl = siteConfig.url.replace(/\/$/, '');
   const jsonLd = {

@@ -22,34 +22,22 @@ export const createSkill = async (skillData: FieldValues) => {
 
 // Fetch all skills
 export const getAllSkills = async () => {
-  let fetchOptions = {};
-
-  fetchOptions = {
-    cache: 'no-store',
-    next: {
-      tags: ['skills'],
-    },
-  };
-
-  const { data } = await axiosInstance.get('/skills', { fetchOptions });
+  const { fetchServer } = await import('@/lib/fetchServer');
+  const data = await fetchServer('/skills', {
+    tags: ['skills'],
+    revalidate: 3600, // Revalidate every hour
+  });
 
   return data;
 };
 
 // Fetch skills based on the category
 export const getSkillsByCategory = async (category?: SkillCategory) => {
-  let fetchOptions = {};
-
-  fetchOptions = {
-    cache: 'no-store',
-    next: {
-      tags: ['skills'],
-    },
-  };
-
-  const { data } = await axiosInstance.get('/skills', {
+  const { fetchServer } = await import('@/lib/fetchServer');
+  const data = await fetchServer('/skills', {
+    tags: ['skills'],
     params: { category },
-    fetchOptions,
+    revalidate: 3600, // Revalidate every hour
   });
 
   return data;

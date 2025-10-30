@@ -8,6 +8,9 @@ import { getAllProjects } from '@/service/projectService/projectService';
 import { getAllBlogs } from '@/service/blogService/blogService';
 import { getAllSkills } from '@/service/skillsService/skillsService';
 
+// Enable ISR: revalidate every hour
+export const revalidate = 3600;
+
 export default async function AboutPage() {
   const aboutData = await getAllAbout();
   const about = aboutData?.data?.[0];

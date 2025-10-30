@@ -41,6 +41,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Enable ISR: revalidate every hour
+export const revalidate = 3600;
+
 export default async function BlogsPage() {
   const data = await getAllBlogs();
   const blogs = data?.data || [];

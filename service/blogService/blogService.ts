@@ -21,22 +21,22 @@ export const createBlog = async (BlogData: FieldValues) => {
 
 // Fetch all blog
 export const getAllBlogs = async (query?: Record<string, any>) => {
-  const fetchOptions = {
-    next: {
-      tags: ['blogs'],
-    },
-  };
-
-  const { data } = await axiosInstance.get('/blogs', {
+  const { fetchServer } = await import('@/lib/fetchServer');
+  const data = await fetchServer('/blogs', {
+    tags: ['blogs'],
     params: query,
-    ...fetchOptions,
+    revalidate: 3600, // Revalidate every hour
   });
 
   return data;
 };
 
 export const getSingleBlog = async (blogId: string) => {
-  const { data } = await axiosInstance.get(`/blogs/${blogId}`);
+  const { fetchServer } = await import('@/lib/fetchServer');
+  const data = await fetchServer(`/blogs/${blogId}`, {
+    tags: ['blogs', `blog-${blogId}`],
+    revalidate: 3600, // Revalidate every hour
+  });
 
   return data;
 };

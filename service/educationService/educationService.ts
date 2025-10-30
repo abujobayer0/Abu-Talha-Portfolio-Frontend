@@ -21,15 +21,11 @@ export const createEducation = async (educationData: FieldValues) => {
 
 // Fetch all education
 export const getAllEducations = async () => {
-  let fetchOptions = {};
-
-  fetchOptions = {
-    next: {
-      tags: ['educations'],
-    },
-  };
-
-  const { data } = await axiosInstance.get('/educations', { fetchOptions });
+  const { fetchServer } = await import('@/lib/fetchServer');
+  const data = await fetchServer('/educations', {
+    tags: ['educations'],
+    revalidate: 3600, // Revalidate every hour
+  });
 
   return data;
 };

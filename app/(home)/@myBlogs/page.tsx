@@ -6,6 +6,9 @@ import Link from 'next/link';
 
 import { getAllBlogs } from '@/service/blogService/blogService';
 
+// Enable ISR: revalidate every hour
+export const revalidate = 3600;
+
 interface BlogsSectionProps {
   searchParams: {
     page?: string;

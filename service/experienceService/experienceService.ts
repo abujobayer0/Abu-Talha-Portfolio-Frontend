@@ -21,16 +21,11 @@ export const createExperience = async (experienceData: FieldValues) => {
 
 // Fetch all experiences
 export const getAllExperiences = async () => {
-  let fetchOptions = {};
-
-  fetchOptions = {
-    next: {
-      tags: ['experiences'],
-    },
-  };
-
-  const { data } = await axiosInstance.get('/experiences?sort=-createdAt', {
-    fetchOptions,
+  const { fetchServer } = await import('@/lib/fetchServer');
+  const data = await fetchServer('/experiences', {
+    tags: ['experiences'],
+    params: { sort: '-createdAt' },
+    revalidate: 3600, // Revalidate every hour
   });
 
   return data;

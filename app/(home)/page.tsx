@@ -1,7 +1,8 @@
 import React from 'react';
-export const dynamic = 'force-dynamic';
-
 import Landing from './_components/landing';
+
+// Enable ISR: revalidate every hour
+export const revalidate = 3600;
 
 export default function Home() {
   return (

@@ -21,15 +21,11 @@ export const createProject = async (projectData: FieldValues) => {
 
 // Fetch all project
 export const getAllProjects = async (query?: Record<string, any>) => {
-  const fetchOptions = {
-    next: {
-      tags: ['projects'],
-    },
-  };
-
-  const { data } = await axiosInstance.get('/projects', {
+  const { fetchServer } = await import('@/lib/fetchServer');
+  const data = await fetchServer('/projects', {
+    tags: ['projects'],
     params: query,
-    ...fetchOptions,
+    revalidate: 3600, // Revalidate every hour
   });
 
   return data;
@@ -37,7 +33,11 @@ export const getAllProjects = async (query?: Record<string, any>) => {
 
 // Fetch all project
 export const getSingleProject = async (projectId: string) => {
-  const { data } = await axiosInstance.get(`/projects/${projectId}`);
+  const { fetchServer } = await import('@/lib/fetchServer');
+  const data = await fetchServer(`/projects/${projectId}`, {
+    tags: ['projects', `project-${projectId}`],
+    revalidate: 3600, // Revalidate every hour
+  });
 
   return data;
 };

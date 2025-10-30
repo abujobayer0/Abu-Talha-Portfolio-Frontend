@@ -5,8 +5,27 @@ import ProjectDetails from '@/app/(home)/_components/module/pojectDetaisl';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 
+// Enable ISR: revalidate every hour
+export const revalidate = 3600;
+
 interface TDetailsParams {
   params: { projectId: string };
+}
+
+// Generate static params for popular projects at build time
+export async function generateStaticParams() {
+  try {
+    const { getAllProjects } = await import('@/service/projectService/projectService');
+    const data = await getAllProjects({ limit: 100 });
+    const projects = data?.data || [];
+    
+    return projects.slice(0, 20).map((project: any) => ({
+      projectId: project._id,
+    }));
+  } catch (error) {
+    // Fallback to empty array if API is unavailable at build time
+    return [];
+  }
 }
 
 export default async function ProjectDetailsPage({ params }: TDetailsParams) {

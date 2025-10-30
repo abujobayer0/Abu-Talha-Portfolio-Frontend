@@ -6,6 +6,25 @@ import { BackHeader } from '@/app/(home)/_components/ui/backHeader';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 
+// Enable ISR: revalidate every hour
+export const revalidate = 3600;
+
+// Generate static params for recent blogs at build time
+export async function generateStaticParams() {
+  try {
+    const { getAllBlogs } = await import('@/service/blogService/blogService');
+    const data = await getAllBlogs({ limit: 100 });
+    const blogs = data?.data || [];
+    
+    return blogs.slice(0, 20).map((blog: any) => ({
+      blogId: blog._id,
+    }));
+  } catch (error) {
+    // Fallback to empty array if API is unavailable at build time
+    return [];
+  }
+}
+
 export async function generateMetadata({ params }: { params: { blogId: string } }): Promise<Metadata> {
   const data = await getSingleBlog(params.blogId);
   const blog = data?.data as TBlog;
