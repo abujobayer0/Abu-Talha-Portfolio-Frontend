@@ -95,6 +95,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-DBYT1FNTFT');`,
           }}
         />
+        {/* Google AdSense */}
+        <script
+          async
+          src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1736054581179049'
+          crossOrigin='anonymous'
+        />
         {/* Twitter conversion tracking base code */}
         <script
           suppressHydrationWarning
