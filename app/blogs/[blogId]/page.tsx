@@ -26,36 +26,55 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { blogId: string } }): Promise<Metadata> {
-  const data = await getSingleBlog(params.blogId);
-  const blog = data?.data as TBlog;
+  let blog: TBlog | null = null;
+  try {
+    const data = await getSingleBlog(params.blogId);
+    blog = data?.data as TBlog;
+  } catch (error) {
+    // Graceful fallback when API is unavailable
+    blog = null;
+  }
+
   const baseUrl = siteConfig.url.replace(/\/$/, '');
   const canonical = `${baseUrl}/blogs/${params.blogId}`;
 
+  const defaultTitle = `Blog Post | ${siteConfig.name}`;
+  const defaultDescription = 'Read our latest blog post.';
+
   return {
-    title: blog?.title,
-    description: blog?.content?.slice(0, 160),
+    title: blog?.title || defaultTitle,
+    description: blog?.content?.slice(0, 160) || defaultDescription,
     alternates: {
       canonical,
     },
     openGraph: {
-      title: blog?.title,
-      description: blog?.content?.slice(0, 160),
+      title: blog?.title || defaultTitle,
+      description: blog?.content?.slice(0, 160) || defaultDescription,
       type: 'article',
       url: canonical,
-      images: [
-        {
-          url: blog?.imageUrl,
-          width: 1200,
-          height: 630,
-          alt: blog?.title,
-        },
-      ],
+      images: blog?.imageUrl
+        ? [
+            {
+              url: blog.imageUrl,
+              width: 1200,
+              height: 630,
+              alt: blog?.title || 'Blog Post',
+            },
+          ]
+        : [
+            {
+              url: siteConfig.ogImage,
+              width: 1200,
+              height: 630,
+              alt: defaultTitle,
+            },
+          ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: blog?.title,
-      description: blog?.content?.slice(0, 160),
-      images: [blog?.imageUrl],
+      title: blog?.title || defaultTitle,
+      description: blog?.content?.slice(0, 160) || defaultDescription,
+      images: blog?.imageUrl ? [blog.imageUrl] : [siteConfig.ogImage],
     },
     authors: blog?.author?.name ? [{ name: blog.author.name }] : undefined,
     robots: { index: true, follow: true },
@@ -64,8 +83,15 @@ export async function generateMetadata({ params }: { params: { blogId: string } 
 }
 
 export default async function BlogDetailsPage({ params }: { params: { blogId: string } }) {
-  const data = await getSingleBlog(params.blogId);
-  const blog = data?.data as TBlog;
+  let blog: TBlog | null = null;
+  try {
+    const data = await getSingleBlog(params.blogId);
+    blog = data?.data as TBlog;
+  } catch (error) {
+    // Graceful fallback when API is unavailable in production
+    blog = null;
+  }
+
   const baseUrl = siteConfig.url.replace(/\/$/, '');
   const canonical = `${baseUrl}/blogs/${params.blogId}`;
 
@@ -143,9 +169,7 @@ export default async function BlogDetailsPage({ params }: { params: { blogId: st
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
-        <div>
-          <BlogCard blog={blog} />
-        </div>
+        <div>{blog ? <BlogCard blog={blog} /> : <div>Blog not found or unavailable.</div>}</div>
       </div>
     </div>
   );

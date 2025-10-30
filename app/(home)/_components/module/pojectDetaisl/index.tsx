@@ -6,6 +6,7 @@ import Image from 'next/image';
 import AnimatedButton from '../../ui/button';
 import { AiOutlineEye } from 'react-icons/ai';
 import { FaGithub } from 'react-icons/fa';
+import { FiExternalLink } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
@@ -131,6 +132,25 @@ export default function ProjectDetails({ project, projects, currentId }: { proje
                 </motion.div>
               </AnimatePresence>
 
+              {/* Live Link Button - Top Right Corner */}
+              {live && (
+                <motion.a
+                  href={live}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='absolute top-4 right-4 z-20 flex items-center gap-2 px-4 py-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md text-gray-900 dark:text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300'
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <span className='text-xs font-semibold bg-green-500 text-white px-2 py-0.5 rounded-full'>LIVE</span>
+                  <FiExternalLink className='w-4 h-4' />
+                  <span className='text-sm font-medium hidden sm:inline'>Visit Site</span>
+                </motion.a>
+              )}
+
               {/* Image Navigation Controls */}
               <button
                 onClick={prevImage}
@@ -194,15 +214,7 @@ export default function ProjectDetails({ project, projects, currentId }: { proje
             <div className='flex flex-wrap justify-between items-center gap-4'>
               <h1 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-white'>{title}</h1>
 
-              <div className='flex flex-wrap gap-2'>
-                <AnimatedButton
-                  text='Live Demo'
-                  bgColor='bg-warning'
-                  textColor='text-white'
-                  href={live}
-                  IconComponent={AiOutlineEye}
-                  shadowColor='shadow-lg shadow-warning/20'
-                />
+              <div className='flex flex-wrap gap-3'>
                 {github.frontend && (
                   <AnimatedButton
                     text='GitHub'

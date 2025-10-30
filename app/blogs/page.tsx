@@ -45,8 +45,14 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function BlogsPage() {
-  const data = await getAllBlogs();
-  const blogs = data?.data || [];
+  let blogs: any[] = [];
+  try {
+    const data = await getAllBlogs();
+    blogs = data?.data || [];
+  } catch (e) {
+    // Graceful fallback when API is unavailable in production
+    blogs = [];
+  }
 
   const baseUrl = siteConfig.url.replace(/\/$/, '');
   const jsonLd = {

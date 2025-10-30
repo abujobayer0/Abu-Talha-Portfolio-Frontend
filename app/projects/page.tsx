@@ -55,13 +55,19 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
   const currentPage = Number(searchParams?.page) || 1;
   const limit = 50;
 
-  const data = await getAllProjects({
-    limit,
-    page: currentPage,
-    sort: '-createdAt',
-  });
+  let data: any = undefined;
+  try {
+    data = await getAllProjects({
+      limit,
+      page: currentPage,
+      sort: '-createdAt',
+    });
+  } catch (e) {
+    // Graceful fallback when API is unavailable in production
+    data = { data: [], meta: { total: 0 } };
+  }
 
-  const projects = data?.data;
+  const projects = data?.data || [];
   const totalItems = data?.meta?.total || 0;
   const totalPages = Math.ceil(totalItems / limit);
 

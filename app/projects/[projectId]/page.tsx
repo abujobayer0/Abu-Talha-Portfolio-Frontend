@@ -30,10 +30,19 @@ export async function generateStaticParams() {
 
 export default async function ProjectDetailsPage({ params }: TDetailsParams) {
   const projectId = params.projectId;
-  const projectData = await getSingleProject(projectId);
-  const productsData = await getAllProjects();
-  const project = projectData?.data;
-  const projects = productsData?.data as TProject[];
+  let project: any = null;
+  let projects: TProject[] = [];
+
+  try {
+    const [projectData, productsData] = await Promise.all([getSingleProject(projectId), getAllProjects()]);
+    project = projectData?.data || null;
+    projects = (productsData?.data as TProject[]) || [];
+  } catch (error) {
+    // Graceful fallback when API is unavailable in production
+    project = null;
+    projects = [];
+  }
+
   const baseUrl = siteConfig.url.replace(/\/$/, '');
   const canonical = `${baseUrl}/projects/${projectId}`;
 
@@ -117,31 +126,41 @@ export default async function ProjectDetailsPage({ params }: TDetailsParams) {
 }
 
 export async function generateMetadata({ params }: TDetailsParams): Promise<Metadata> {
-  const projectRes = await getSingleProject(params.projectId);
-  const project = projectRes?.data as any;
+  let project: any = null;
+  try {
+    const projectRes = await getSingleProject(params.projectId);
+    project = projectRes?.data as any;
+  } catch (error) {
+    // Graceful fallback when API is unavailable
+    project = null;
+  }
+
   const baseUrl = siteConfig.url.replace(/\/$/, '');
   const canonical = `${baseUrl}/projects/${params.projectId}`;
 
+  const defaultTitle = `Project | ${siteConfig.name}`;
+  const defaultDescription = 'View project details and information.';
+
   return {
-    title: project?.title,
-    description: project?.description?.replace(/<[^>]+>/g, '').slice(0, 160),
+    title: project?.title || defaultTitle,
+    description: project?.description?.replace(/<[^>]+>/g, '').slice(0, 160) || defaultDescription,
     alternates: { canonical },
     openGraph: {
-      title: project?.title,
-      description: project?.description?.replace(/<[^>]+>/g, '').slice(0, 160),
+      title: project?.title || defaultTitle,
+      description: project?.description?.replace(/<[^>]+>/g, '').slice(0, 160) || defaultDescription,
       url: canonical,
       type: 'article',
       images: (project?.images || []).slice(0, 1).map((url: string) => ({
         url,
         width: 1200,
         height: 630,
-        alt: project?.title,
+        alt: project?.title || 'Project',
       })),
     },
     twitter: {
       card: 'summary_large_image',
-      title: project?.title,
-      description: project?.description?.replace(/<[^>]+>/g, '').slice(0, 160),
+      title: project?.title || defaultTitle,
+      description: project?.description?.replace(/<[^>]+>/g, '').slice(0, 160) || defaultDescription,
       images: (project?.images || []).slice(0, 1),
     },
     robots: { index: true, follow: true },
