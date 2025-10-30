@@ -18,7 +18,7 @@ export async function generateStaticParams() {
     const { getAllProjects } = await import('@/service/projectService/projectService');
     const data = await getAllProjects({ limit: 100 });
     const projects = data?.data || [];
-    
+
     return projects.slice(0, 20).map((project: any) => ({
       projectId: project._id,
     }));
@@ -34,6 +34,61 @@ export default async function ProjectDetailsPage({ params }: TDetailsParams) {
   const productsData = await getAllProjects();
   const project = projectData?.data;
   const projects = productsData?.data as TProject[];
+  const baseUrl = siteConfig.url.replace(/\/$/, '');
+  const canonical = `${baseUrl}/projects/${projectId}`;
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: project?.title,
+    description: project?.description?.replace(/<[^>]+>/g, '').slice(0, 200),
+    url: canonical,
+    image: (project?.images || []).slice(0, 1),
+    datePublished: project?.createdAt,
+    dateModified: project?.updatedAt || project?.createdAt,
+    applicationCategory: 'WebApplication',
+    operatingSystem: 'Web',
+    author: {
+      '@type': 'Person',
+      name: 'Abu Talha Md Jobayer',
+      url: siteConfig.url,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Projects',
+        item: `${baseUrl}/projects`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: project?.title || 'Project',
+        item: canonical,
+      },
+    ],
+  };
 
   return (
     <div className='pt-4 px-2'>
@@ -42,16 +97,14 @@ export default async function ProjectDetailsPage({ params }: TDetailsParams) {
           type='application/ld+json'
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'CreativeWork',
-              name: project?.title,
-              description: project?.description?.slice(0, 200),
-              url: `${siteConfig.url.replace(/\/$/, '')}/projects/${projectId}`,
-              image: (project?.images || []).slice(0, 1),
-              datePublished: project?.createdAt,
-              dateModified: project?.updatedAt || project?.createdAt,
-            }),
+            __html: JSON.stringify(jsonLd),
+          }}
+        />
+        <script
+          type='application/ld+json'
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(breadcrumbJsonLd),
           }}
         />
         <ProjectDetails project={project} projects={projects} currentId={projectId} />

@@ -15,7 +15,7 @@ export async function generateStaticParams() {
     const { getAllBlogs } = await import('@/service/blogService/blogService');
     const data = await getAllBlogs({ limit: 100 });
     const blogs = data?.data || [];
-    
+
     return blogs.slice(0, 20).map((blog: any) => ({
       blogId: blog._id,
     }));
@@ -71,8 +71,11 @@ export default async function BlogDetailsPage({ params }: { params: { blogId: st
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    mainEntityOfPage: canonical,
+    '@type': 'Article',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonical,
+    },
     headline: blog?.title,
     description: blog?.content?.slice(0, 200),
     image: [blog?.imageUrl].filter(Boolean),
@@ -82,16 +85,52 @@ export default async function BlogDetailsPage({ params }: { params: { blogId: st
       ? {
           '@type': 'Person',
           name: blog.author.name,
+          url: siteConfig.url,
         }
-      : undefined,
+      : {
+          '@type': 'Person',
+          name: 'Abu Talha Md Jobayer',
+          url: siteConfig.url,
+        },
     publisher: {
       '@type': 'Organization',
       name: siteConfig.name,
+      url: siteConfig.url,
       logo: {
         '@type': 'ImageObject',
         url: siteConfig.ogImage,
+        width: 1200,
+        height: 630,
       },
     },
+    articleSection: 'Technology',
+    keywords: blog?.title ? blog.title.split(/\s+/).join(', ') : 'Web Development, Technology',
+    inLanguage: 'en-US',
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blogs',
+        item: `${baseUrl}/blogs`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: blog?.title || 'Blog Post',
+        item: canonical,
+      },
+    ],
   };
 
   return (
@@ -99,6 +138,11 @@ export default async function BlogDetailsPage({ params }: { params: { blogId: st
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10'>
         <BackHeader />
         <script type='application/ld+json' suppressHydrationWarning dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script
+          type='application/ld+json'
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
         <div>
           <BlogCard blog={blog} />
         </div>

@@ -76,7 +76,7 @@ export const siteConfig = {
     github: 'https://github.com/abujobayer0',
     linkedin: 'https://www.linkedin.com/in/abutalhamdjobayer/',
     facebook: 'https://www.facebook.com/abutalhazubayermunna',
-    twitter: 'https://x.com/abu_jobaye71370',
+    twitter: 'https://x.com/ApexPropdesign',
     discord: 'https://discord.com/channels/atmjobayer',
     resume: 'https://drive.google.com/file/d/1YIFQMCuGD8NCdpW4XuSH_01Ft9bPh_2V/view?usp=drive_link',
   },

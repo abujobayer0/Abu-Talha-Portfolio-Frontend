@@ -7,9 +7,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url.replace(/\/$/, '');
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${base}/`, lastModified: new Date() },
-    { url: `${base}/projects`, lastModified: new Date() },
-    { url: `${base}/blogs`, lastModified: new Date() },
+    { url: `${base}/`, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
+    { url: `${base}/projects`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${base}/blogs`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${base}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
   ];
 
   try {
@@ -24,11 +25,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const blogEntries: MetadataRoute.Sitemap = blogs.map((b: any) => ({
       url: `${base}/blogs/${b._id}`,
       lastModified: new Date(b.updatedAt || b.createdAt || Date.now()),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
     }));
 
     const projectEntries: MetadataRoute.Sitemap = projects.map((p: any) => ({
       url: `${base}/projects/${p._id}`,
       lastModified: new Date(p.updatedAt || p.createdAt || Date.now()),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
     }));
 
     return [...staticRoutes, ...blogEntries, ...projectEntries];
