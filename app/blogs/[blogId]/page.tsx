@@ -1,198 +1,73 @@
-import { BlogCard } from '@/app/(home)/_components/module/blogs/blogCard';
-import { Navbar } from '@/app/(home)/_components/ui/navbar';
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { getSingleBlog } from '@/service/blogService/blogService';
 import { TBlog } from '@/types';
-import { BackHeader } from '@/app/(home)/_components/ui/backHeader';
-import { Metadata } from 'next';
-import { siteConfig } from '@/config/site';
 
-// Enable ISR: revalidate every hour
-export const revalidate = 3600;
+const BlogCard = dynamic(() => import('@/app/(home)/_components/module/blogs/blogCard').then((mod) => mod.BlogCard), { ssr: false });
 
-// Generate static params for recent blogs at build time
-export async function generateStaticParams() {
-  try {
-    const { getAllBlogs } = await import('@/service/blogService/blogService');
-    const data = await getAllBlogs({ limit: 100 });
-    const blogs = data?.data || [];
+export default function BlogDetailsPage(props: any) {
+  const { blogId } = props.params || {};
+  const [loading, setLoading] = useState(true);
+  const [blog, setBlog] = useState<TBlog | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-    // Safe guard against invalid data structure
-    if (!Array.isArray(blogs)) {
-      return [];
-    }
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    setError(null);
+    getSingleBlog(blogId)
+      .then((data) => {
+        if (!mounted) return;
+        setBlog(data?.data || null);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (mounted) {
+          setError('Could not load blog.');
+          setBlog(null);
+          setLoading(false);
+        }
+      });
+    return () => {
+      mounted = false;
+    };
+  }, [blogId]);
 
-    return blogs
-      .filter((blog: any) => blog && blog._id) // Filter out invalid entries
-      .slice(0, 20)
-      .map((blog: any) => ({
-        blogId: blog._id,
-      }));
-  } catch (error) {
-    console.error('Error in generateStaticParams for blogs:', error);
-    // Fallback to empty array if API is unavailable at build time
-    return [];
-  }
-}
-
-export async function generateMetadata({ params }: { params: { blogId: string } }): Promise<Metadata> {
-  let blog: TBlog | null = null;
-  try {
-    const data = await getSingleBlog(params.blogId);
-    blog = data?.data as TBlog;
-  } catch (error) {
-    // Graceful fallback when API is unavailable
-    blog = null;
-  }
-
-  const baseUrl = siteConfig?.url?.replace(/\/$/, '') || 'https://www.apexpropdesign.com';
-  const canonical = `${baseUrl}/blogs/${params.blogId}`;
-
-  const defaultTitle = `Blog Post | ${siteConfig?.name || 'Abu Talha'}`;
-  const defaultDescription = 'Read our latest blog post.';
-
-  return {
-    title: blog?.title || defaultTitle,
-    description: blog?.content?.replace(/<[^>]+>/g, '')?.slice(0, 160) || defaultDescription,
-    alternates: {
-      canonical,
-    },
-    openGraph: {
-      title: blog?.title || defaultTitle,
-      description: blog?.content?.replace(/<[^>]+>/g, '')?.slice(0, 160) || defaultDescription,
-      type: 'article',
-      url: canonical,
-      images: blog?.imageUrl
-        ? [
-            {
-              url: blog?.imageUrl,
-              width: 1200,
-              height: 630,
-              alt: blog?.title || 'Blog Post',
-            },
-          ]
-        : [
-            {
-              url:
-                siteConfig?.ogImage ||
-                'https://i.ibb.co.com/wF9NWgf8/Building-websites-at-affordable-prices-is-a-valuable-service-that-caters-to-small-businesses-startup.png',
-              width: 1200,
-              height: 630,
-              alt: defaultTitle,
-            },
-          ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: blog?.title || defaultTitle,
-      description: blog?.content?.replace(/<[^>]+>/g, '')?.slice(0, 160) || defaultDescription,
-      images: blog?.imageUrl
-        ? [blog.imageUrl]
-        : [
-            siteConfig?.ogImage ||
-              'https://i.ibb.co.com/wF9NWgf8/Building-websites-at-affordable-prices-is-a-valuable-service-that-caters-to-small-businesses-startup.png',
-          ],
-    },
-    authors: blog?.author?.name ? [{ name: blog.author.name }] : undefined,
-    robots: { index: true, follow: true },
-    keywords: blog?.title ? blog?.title?.split(/\s+/).slice(0, 10) : undefined,
-  };
-}
-
-export default async function BlogDetailsPage({ params }: { params: { blogId: string } }) {
-  let blog: TBlog | null = null;
-  try {
-    const data = await getSingleBlog(params.blogId);
-    blog = data?.data as TBlog;
-  } catch (error) {
-    // Graceful fallback when API is unavailable in production
-    blog = null;
-  }
-
-  const baseUrl = siteConfig?.url?.replace(/\/$/, '') || 'https://www.apexpropdesign.com';
-  const canonical = `${baseUrl}/blogs/${params.blogId}`;
-
-  const jsonLd = blog
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        mainEntityOfPage: {
-          '@type': 'WebPage',
-          '@id': canonical,
-        },
-        headline: blog?.title,
-        description: blog?.content?.replace(/<[^>]+>/g, '')?.slice(0, 200),
-        image: [blog?.imageUrl].filter(Boolean),
-        datePublished: blog?.createdAt,
-        dateModified: blog?.updatedAt || blog?.createdAt,
-        author: blog?.author?.name
-          ? {
-              '@type': 'Person',
-              name: blog.author.name,
-              url: siteConfig.url,
-            }
-          : {
-              '@type': 'Person',
-              name: 'Abu Talha Md Jobayer',
-              url: siteConfig?.url || 'https://www.apexpropdesign.com',
-            },
-        publisher: {
-          '@type': 'Organization',
-          name: siteConfig?.name || 'Abu Talha',
-          url: siteConfig?.url || 'https://www.apexpropdesign.com',
-          logo: {
-            '@type': 'ImageObject',
-            url:
-              siteConfig?.ogImage ||
-              'https://i.ibb.co.com/wF9NWgf8/Building-websites-at-affordable-prices-is-a-valuable-service-that-caters-to-small-businesses-startup.png',
-            width: 1200,
-            height: 630,
-          },
-        },
-        articleSection: 'Technology',
-        keywords: blog?.title ? blog.title.split(/\s+/)?.join(', ') : 'Web Development, Technology',
-        inLanguage: 'en-US',
-      }
-    : null;
-
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: baseUrl,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Blogs',
-        item: `${baseUrl}/blogs`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: blog?.title || 'Blog Post',
-        item: canonical,
-      },
-    ],
-  };
-
-  return (
-    <div className='bg-background min-h-screen'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10'>
-        <BackHeader />
-        {jsonLd && (
-          <script type='application/ld+json' suppressHydrationWarning dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-        )}
-        <script
-          type='application/ld+json'
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-        />
-        <div>{blog ? <BlogCard blog={blog} /> : <div>Blog not found or unavailable.</div>}</div>
+  if (loading) {
+    return (
+      <div className='bg-background min-h-screen'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10'>
+          <div className='animate-pulse space-y-6'>
+            <div className='h-6 w-24 bg-gray-200 dark:bg-gray-800 rounded' />
+            <div className='h-8 w-2/3 bg-gray-200 dark:bg-gray-800 rounded' />
+            <div className='relative w-full h-[300px] md:h-[400px] bg-gray-200 dark:bg-gray-800 rounded-xl' />
+            <div className='space-y-3'>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className='h-4 w-full bg-gray-200 dark:bg-gray-800 rounded' />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+  if (error) {
+    return (
+      <div className='bg-background min-h-screen'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 text-center'>
+          <h1 className='text-2xl font-semibold mb-2'>Unable to load blog</h1>
+          <p className='text-muted-foreground mb-6'>Something went wrong while fetching this blog.</p>
+          <button onClick={() => window.location.reload()} className='px-4 py-2 rounded bg-primary text-primary-foreground'>
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+  if (!blog) {
+    return <div className='max-w-4xl mx-auto px-4 py-16'>Blog not found or unavailable.</div>;
+  }
+  return <BlogCard blog={blog} />;
 }
