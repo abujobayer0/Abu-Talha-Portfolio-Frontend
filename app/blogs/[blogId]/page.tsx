@@ -16,7 +16,7 @@ export async function generateStaticParams() {
     const data = await getAllBlogs({ limit: 100 });
     const blogs = data?.data || [];
 
-    return blogs.slice(0, 20).map((blog: any) => ({
+    return blogs?.slice(0, 20)?.map((blog: any) => ({
       blogId: blog._id,
     }));
   } catch (error) {
@@ -43,19 +43,19 @@ export async function generateMetadata({ params }: { params: { blogId: string } 
 
   return {
     title: blog?.title || defaultTitle,
-    description: blog?.content?.slice(0, 160) || defaultDescription,
+    description: blog?.content?.replace(/<[^>]+>/g, '')?.slice(0, 160) || defaultDescription,
     alternates: {
       canonical,
     },
     openGraph: {
       title: blog?.title || defaultTitle,
-      description: blog?.content?.slice(0, 160) || defaultDescription,
+      description: blog?.content?.replace(/<[^>]+>/g, '')?.slice(0, 160) || defaultDescription,
       type: 'article',
       url: canonical,
       images: blog?.imageUrl
         ? [
             {
-              url: blog.imageUrl,
+              url: blog?.imageUrl,
               width: 1200,
               height: 630,
               alt: blog?.title || 'Blog Post',
@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: { params: { blogId: string } 
           ]
         : [
             {
-              url: siteConfig.ogImage,
+              url: siteConfig?.ogImage,
               width: 1200,
               height: 630,
               alt: defaultTitle,
@@ -73,12 +73,12 @@ export async function generateMetadata({ params }: { params: { blogId: string } 
     twitter: {
       card: 'summary_large_image',
       title: blog?.title || defaultTitle,
-      description: blog?.content?.slice(0, 160) || defaultDescription,
+      description: blog?.content?.replace(/<[^>]+>/g, '')?.slice(0, 160) || defaultDescription,
       images: blog?.imageUrl ? [blog.imageUrl] : [siteConfig.ogImage],
     },
     authors: blog?.author?.name ? [{ name: blog.author.name }] : undefined,
     robots: { index: true, follow: true },
-    keywords: blog?.title ? blog.title.split(/\s+/).slice(0, 10) : undefined,
+    keywords: blog?.title ? blog?.title?.split(/\s+/).slice(0, 10) : undefined,
   };
 }
 
@@ -103,7 +103,7 @@ export default async function BlogDetailsPage({ params }: { params: { blogId: st
       '@id': canonical,
     },
     headline: blog?.title,
-    description: blog?.content?.slice(0, 200),
+    description: blog?.content?.replace(/<[^>]+>/g, '')?.slice(0, 200),
     image: [blog?.imageUrl].filter(Boolean),
     datePublished: blog?.createdAt,
     dateModified: blog?.updatedAt || blog?.createdAt,
@@ -130,7 +130,7 @@ export default async function BlogDetailsPage({ params }: { params: { blogId: st
       },
     },
     articleSection: 'Technology',
-    keywords: blog?.title ? blog.title.split(/\s+/).join(', ') : 'Web Development, Technology',
+    keywords: blog?.title ? blog.title.split(/\s+/)?.join(', ') : 'Web Development, Technology',
     inLanguage: 'en-US',
   };
 

@@ -50,7 +50,7 @@ export default async function ProjectDetailsPage({ params }: TDetailsParams) {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: project?.title,
-    description: project?.description?.replace(/<[^>]+>/g, '').slice(0, 200),
+    description: project?.description?.replace(/<[^>]+>/g, '')?.slice(0, 200),
     url: canonical,
     image: (project?.images || []).slice(0, 1),
     datePublished: project?.createdAt,
@@ -102,6 +102,14 @@ export default async function ProjectDetailsPage({ params }: TDetailsParams) {
   return (
     <div className='pt-4 px-2'>
       <div className='mt-4'>
+        {!project ? (
+          <div className='max-w-7xl mx-auto px-4 py-16'>
+            <h1 className='text-2xl font-semibold mb-2'>Project unavailable</h1>
+            <p className='text-muted-foreground'>
+              The project you’re looking for could not be loaded. It may have been removed or is temporarily unavailable.
+            </p>
+          </div>
+        ) : null}
         <script
           type='application/ld+json'
           suppressHydrationWarning
@@ -116,7 +124,7 @@ export default async function ProjectDetailsPage({ params }: TDetailsParams) {
             __html: JSON.stringify(breadcrumbJsonLd),
           }}
         />
-        <ProjectDetails project={project} projects={projects} currentId={projectId} />
+        {project ? <ProjectDetails project={project} projects={projects} currentId={projectId} /> : null}
         <div className='w-full h-full'>
           <div className='absolute top-0 left-0 w-full h-[60px] bg-[#9333ea] blur-[150px] transform rotate-45' />
         </div>
@@ -143,11 +151,11 @@ export async function generateMetadata({ params }: TDetailsParams): Promise<Meta
 
   return {
     title: project?.title || defaultTitle,
-    description: project?.description?.replace(/<[^>]+>/g, '').slice(0, 160) || defaultDescription,
+    description: project?.description?.replace(/<[^>]+>/g, '')?.slice(0, 160) || defaultDescription,
     alternates: { canonical },
     openGraph: {
       title: project?.title || defaultTitle,
-      description: project?.description?.replace(/<[^>]+>/g, '').slice(0, 160) || defaultDescription,
+      description: project?.description?.replace(/<[^>]+>/g, '')?.slice(0, 160) || defaultDescription,
       url: canonical,
       type: 'article',
       images: (project?.images || []).slice(0, 1).map((url: string) => ({
@@ -160,7 +168,7 @@ export async function generateMetadata({ params }: TDetailsParams): Promise<Meta
     twitter: {
       card: 'summary_large_image',
       title: project?.title || defaultTitle,
-      description: project?.description?.replace(/<[^>]+>/g, '').slice(0, 160) || defaultDescription,
+      description: project?.description?.replace(/<[^>]+>/g, '')?.slice(0, 160) || defaultDescription,
       images: (project?.images || []).slice(0, 1),
     },
     robots: { index: true, follow: true },

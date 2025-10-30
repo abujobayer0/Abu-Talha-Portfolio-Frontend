@@ -15,10 +15,16 @@ import { findRelatedProjects } from '@/utils/findRelatedProjects';
 
 export default function ProjectDetails({ project, projects, currentId }: { project: TProject; projects: TProject[]; currentId: string }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { images, title, description, technologies, live, github } = project;
-  const relatedProjects = findRelatedProjects(projects, currentId);
+  const images = Array.isArray((project as any)?.images) ? (project as any).images : [];
+  const title = (project as any)?.title ?? 'Project';
+  const description = (project as any)?.description ?? '';
+  const technologies = Array.isArray((project as any)?.technologies) ? (project as any).technologies : [];
+  const live = (project as any)?.live as string | undefined;
+  const github = (project as any)?.github || {};
+  const relatedProjects = findRelatedProjects(projects || [], currentId);
   // Auto-advance image carousel
   useEffect(() => {
+    if (!images.length) return;
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % images.length);
     }, 5000);
@@ -93,11 +99,13 @@ export default function ProjectDetails({ project, projects, currentId }: { proje
   const [direction, setDirection] = useState(0);
 
   const nextImage = () => {
+    if (!images.length) return;
     setDirection(1);
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
   };
 
   const prevImage = () => {
+    if (!images.length) return;
     setDirection(-1);
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
@@ -111,26 +119,30 @@ export default function ProjectDetails({ project, projects, currentId }: { proje
           <motion.div className='relative aspect-[16/9] rounded-2xl overflow-hidden bg-black shadow-xl' variants={itemVariants}>
             {/* Main Image with Animation */}
             <div className='relative w-full h-full'>
-              <AnimatePresence initial={false} custom={direction}>
-                <motion.div
-                  key={currentImageIndex}
-                  custom={direction}
-                  variants={imageVariants}
-                  initial='enter'
-                  animate='center'
-                  exit='exit'
-                  className='absolute inset-0'
-                >
-                  <Image
-                    src={images[currentImageIndex]}
-                    alt={`${title} - image ${currentImageIndex + 1}`}
-                    fill
-                    priority
-                    sizes='(max-width: 1024px) 100vw, 66vw'
-                    className='object-cover'
-                  />
-                </motion.div>
-              </AnimatePresence>
+              {images.length > 0 ? (
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.div
+                    key={currentImageIndex}
+                    custom={direction}
+                    variants={imageVariants}
+                    initial='enter'
+                    animate='center'
+                    exit='exit'
+                    className='absolute inset-0'
+                  >
+                    <Image
+                      src={images[currentImageIndex]}
+                      alt={`${title} - image ${currentImageIndex + 1}`}
+                      fill
+                      priority
+                      sizes='(max-width: 1024px) 100vw, 66vw'
+                      className='object-cover'
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              ) : (
+                <div className='absolute inset-0 flex items-center justify-center text-white/70'>No images available</div>
+              )}
 
               {/* Live Link Button - Top Right Corner */}
               {live && (
@@ -194,7 +206,7 @@ export default function ProjectDetails({ project, projects, currentId }: { proje
 
               {/* Image Pagination Indicator */}
               <div className='absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10'>
-                {images.map((_, index) => (
+                {images.map((_: string, index: number) => (
                   <button
                     key={index}
                     onClick={() => {
@@ -239,7 +251,7 @@ export default function ProjectDetails({ project, projects, currentId }: { proje
             </div>
 
             <div className='flex flex-wrap gap-2'>
-              {technologies.map((tech) => (
+              {technologies.map((tech: { _id: string; icon: string; name: string }) => (
                 <motion.span
                   key={tech._id}
                   className='bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-sm border border-gray-200 dark:border-gray-700'
@@ -286,13 +298,17 @@ export default function ProjectDetails({ project, projects, currentId }: { proje
                       whileHover={{ y: -5 }}
                     >
                       <div className='aspect-video relative'>
-                        <Image
-                          src={relatedProject.images[0]}
-                          alt={relatedProject.title}
-                          fill
-                          sizes='(max-width: 1024px) 100vw, 33vw'
-                          className='object-cover group-hover:scale-105 transition-transform duration-500'
-                        />
+                        {relatedProject.images && relatedProject.images[0] ? (
+                          <Image
+                            src={relatedProject.images[0]}
+                            alt={relatedProject.title}
+                            fill
+                            sizes='(max-width: 1024px) 100vw, 33vw'
+                            className='object-cover group-hover:scale-105 transition-transform duration-500'
+                          />
+                        ) : (
+                          <div className='w-full h-full flex items-center justify-center text-gray-500'>No image</div>
+                        )}
                         <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity' />
                       </div>
                       <div className='absolute bottom-0 left-0 right-0 p-4'>
@@ -333,7 +349,7 @@ export default function ProjectDetails({ project, projects, currentId }: { proje
             <h2 className='text-xl font-bold mb-4 text-gray-900 dark:text-white'>Technology Stack</h2>
 
             <div className='space-y-3'>
-              {technologies.map((tech) => (
+              {technologies.map((tech: { _id: string; icon: string; name: string }) => (
                 <div key={tech._id} className='flex items-center gap-3'>
                   <div className='w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 p-1.5 flex items-center justify-center'>
                     <Image src={tech.icon} alt={tech.name} width={24} height={24} className='rounded-full object-cover' />

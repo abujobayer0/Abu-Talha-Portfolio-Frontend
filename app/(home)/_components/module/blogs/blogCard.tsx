@@ -15,7 +15,7 @@ export const BlogCard = ({ blog }: BlogCardProps) => {
   // Function to safely parse HTML content from Quill
   const renderQuillContent = (content: string) => {
     // Sanitize HTML to prevent XSS attacks
-    const sanitizedContent = DOMPurify.sanitize(content, {
+    const sanitizedContent = DOMPurify.sanitize(content || '', {
       ADD_ATTR: ['target'],
       ADD_TAGS: ['iframe'],
       ALLOWED_ATTR: ['href', 'src', 'class', 'style', 'target'],
@@ -25,11 +25,7 @@ export const BlogCard = ({ blog }: BlogCardProps) => {
     return parse(sanitizedContent, {
       trim: true,
       replace: (domNode) => {
-        if (
-          domNode.type === 'tag' &&
-          domNode.name === 'p' &&
-          domNode.children?.length === 0
-        ) {
+        if (domNode.type === 'tag' && domNode.name === 'p' && domNode.children?.length === 0) {
           return <br />;
         }
         return undefined;
@@ -38,49 +34,45 @@ export const BlogCard = ({ blog }: BlogCardProps) => {
   };
 
   return (
-    <article className="max-w-4xl mx-auto  rounded-2xl shadow-md overflow-hidden transition hover:shadow-lg hover:border-warning-500 p-6 md:p-10">
+    <article className='max-w-4xl mx-auto  rounded-2xl shadow-md overflow-hidden transition hover:shadow-lg hover:border-warning-500 p-6 md:p-10'>
       {/* Author Info */}
-      <div className="flex items-center gap-4 mb-6">
-        <Avatar
-          size="lg"
-          src={blog.author.image}
-          className="ring-2 ring-warning-500"
-        />
-        <div className="flex flex-col">
-          <span className="text-base font-semibold text-foreground dark:text-warning-50">
-            {blog.author.name}
+      <div className='flex items-center gap-4 mb-6'>
+        <Avatar size='lg' src={blog.author?.image} className='ring-2 ring-warning-500' />
+        <div className='flex flex-col'>
+          <span className='text-base font-semibold text-foreground dark:text-warning-50'>
+            {blog.author?.name || 'Abu Talha Md Jobayer'}
           </span>
-          <time className="text-sm text-default-500 dark:text-warning-400">
-            {new Date(blog.createdAt).toLocaleDateString(undefined, {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
+          <time className='text-sm text-default-500 dark:text-warning-400'>
+            {blog.createdAt
+              ? new Date(blog.createdAt).toLocaleDateString(undefined, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })
+              : ''}
           </time>
         </div>
       </div>
 
       {/* Blog Title */}
-      <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
-        {blog.title}
-      </h1>
+      <h1 className='text-3xl font-bold mb-4 text-gray-900 dark:text-white'>{blog.title}</h1>
 
       {/* Blog Image */}
       {blog.imageUrl && (
-        <div className="relative w-full h-[300px] md:h-[400px] mb-6 rounded-xl overflow-hidden">
+        <div className='relative w-full h-[300px] md:h-[400px] mb-6 rounded-xl overflow-hidden'>
           <Image
             src={blog.imageUrl}
             alt={`Featured image for ${blog.title}`}
             fill
-            sizes="(max-width: 768px) 100vw, 800px"
-            className="object-cover rounded-xl transition-transform hover:scale-105"
+            sizes='(max-width: 768px) 100vw, 800px'
+            className='object-cover rounded-xl transition-transform hover:scale-105'
             priority
           />
         </div>
       )}
 
       {/* Blog Content */}
-      <section className="quill-content prose prose-lg dark:prose-invert max-w-none text-lg leading-relaxed text-gray-800 dark:text-gray-200 prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-a:text-warning-600 dark:prose-a:text-warning-400 prose-a:font-medium prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl">
+      <section className='quill-content prose prose-lg dark:prose-invert max-w-none text-lg leading-relaxed text-gray-800 dark:text-gray-200 prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-a:text-warning-600 dark:prose-a:text-warning-400 prose-a:font-medium prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl'>
         {renderQuillContent(blog.content)}
       </section>
 
