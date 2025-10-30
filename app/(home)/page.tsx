@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     absolute: siteConfig.name,
   },
   description: siteConfig.description,
+  keywords: siteConfig.keywords,
   alternates: {
     canonical: siteConfig.url,
   },

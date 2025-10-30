@@ -15,28 +15,12 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  keywords: [
-    'Full Stack Developer',
-    'Web Developer',
-    'Mobile Developer',
-    'React Developer',
-    'Next.js Developer',
-    'TypeScript Developer',
-    'Node.js Developer',
-    'Frontend Developer',
-    'Backend Developer',
-    'Portfolio',
-    'Software Engineer',
-    'Abu Talha',
-    'Web Development Services',
-    'Custom Web Application',
-    'Responsive Web Design',
-  ],
+  keywords: [...(siteConfig.keywords || [])],
   authors: [{ name: 'Abu Talha Md Jobayer', url: siteConfig.url }],
   creator: 'Abu Talha Md Jobayer',
   publisher: 'Abu Talha Md Jobayer',
-  category: 'Technology',
-  classification: 'Portfolio Website',
+  category: 'Professional Services',
+  classification: 'Software Development Services',
   metadataBase: new URL(siteConfig.url),
   alternates: {
     canonical: siteConfig.url,
@@ -140,6 +124,53 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* End TikTok Pixel Code */}
       </head>
       <body className={clsx('min-h-screen bg-background font-sans md:comic-neue antialiased', fontSans.variable)}>
+        <script
+          type='application/ld+json'
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'ProfessionalService',
+              name: siteConfig.name,
+              url: siteConfig.url,
+              image: siteConfig.ogImage,
+              areaServed: siteConfig.areasServed,
+              serviceType: siteConfig.services,
+              description: siteConfig.description,
+              sameAs: [siteConfig.links.github, siteConfig.links.linkedin, siteConfig.links.twitter, siteConfig.links.facebook].filter(
+                Boolean
+              ),
+              hasOfferCatalog: {
+                '@type': 'OfferCatalog',
+                name: 'Pricing',
+                itemListElement: (siteConfig.pricing?.plans || []).map((p: any) => ({
+                  '@type': 'Offer',
+                  name: `${p.name} (${p.type})`,
+                  price: p.price,
+                  priceCurrency: siteConfig.pricing?.currency || 'USD',
+                  url: `${siteConfig.url.replace(/\/$/, '')}${p.ctaHref}`,
+                  category: p.type,
+                  availability: 'https://schema.org/InStock',
+                })),
+              },
+            }),
+          }}
+        />
+        <script
+          type='application/ld+json'
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: (siteConfig.faq || []).map((f: any) => ({
+                '@type': 'Question',
+                name: f.q,
+                acceptedAnswer: { '@type': 'Answer', text: f.a },
+              })),
+            }),
+          }}
+        />
         {/* Organization and WebSite JSON-LD */}
         <script
           type='application/ld+json'

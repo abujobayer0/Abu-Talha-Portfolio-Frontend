@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { siteConfig } from '@/config/site';
 import { motion } from 'framer-motion';
 import GridBackgrounds from '@/components/common/backgrounds/grid';
 import { Title } from './title';
@@ -29,14 +30,33 @@ const cardVariants = {
 };
 
 export default function PricingSection() {
+  const pricing = siteConfig.pricing;
+  const currencySymbol = pricing?.currency === 'USD' ? '$' : '';
+  const plans = pricing?.plans ?? [];
+  const offersJsonLd = plans.map((p) => ({
+    '@type': 'Offer',
+    name: p.name,
+    price: p.price,
+    priceCurrency: pricing?.currency || 'USD',
+    category: p.type,
+    url: `${siteConfig.url.replace(/\/$/, '')}${p.ctaHref}`,
+    availability: 'https://schema.org/InStock',
+  }));
   return (
     <section id='pricing' aria-labelledby='pricing-heading' className='py-12 relative'>
       <GridBackgrounds />
       <div className='container mx-auto px-4 relative z-10'>
         <Title title1='Pricing' title2='Hire Me' />
         <p className='mt-2 text-center text-gray-400 max-w-2xl mx-auto'>
-          Transparent hourly rates. Monthly hire available — let’s scope your needs.
+          Transparent hourly rates and best-value monthly option. {pricing?.notes}
         </p>
+        <script
+          type='application/ld+json'
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({ '@context': 'https://schema.org', '@type': 'AggregateOffer', offers: offersJsonLd }),
+          }}
+        />
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12'>
           {/* Web Development */}
@@ -66,7 +86,7 @@ export default function PricingSection() {
                   </span>
                   <span className='rounded-full bg-warning/90 px-2 py-0.5 text-[10px] font-semibold text-gray-50'>Popular</span>
                 </div>
-                <PriceTag amount='$15' />
+                <PriceTag amount={`${currencySymbol}${plans.find((p) => p.id === 'web-hourly')?.price ?? 15}`} />
                 <ul className='mt-4 space-y-2 text-sm text-purple-900 dark:text-purple-200'>
                   <li className='flex items-center gap-2'>
                     <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
@@ -111,7 +131,7 @@ export default function PricingSection() {
                 </ul>
                 <div className='mt-6'>
                   <Link
-                    href={'/contact?service=web&rate=15'}
+                    href={plans.find((p) => p.id === 'web-hourly')?.ctaHref || '/contact?service=web&rate=15'}
                     className='inline-flex items-center justify-center rounded-full bg-warning text-gray-50 font-semibold px-5 py-3 hover:opacity-90 transition'
                   >
                     Hire for Web
@@ -145,7 +165,7 @@ export default function PricingSection() {
                     Hourly
                   </span>
                 </div>
-                <PriceTag amount='$20' />
+                <PriceTag amount={`${currencySymbol}${plans.find((p) => p.id === 'mobile-hourly')?.price ?? 20}`} />
                 <ul className='mt-4 space-y-2 text-sm text-purple-900 dark:text-purple-200'>
                   <li className='flex items-center gap-2'>
                     <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
@@ -190,7 +210,7 @@ export default function PricingSection() {
                 </ul>
                 <div className='mt-6'>
                   <Link
-                    href={'/contact?service=mobile&rate=20'}
+                    href={plans.find((p) => p.id === 'mobile-hourly')?.ctaHref || '/contact?service=mobile&rate=20'}
                     className='inline-flex items-center justify-center rounded-full border border-purple-400/30 text-purple-900 dark:text-purple-50 font-semibold px-5 py-3 bg-white/30 hover:bg-white/40 transition'
                   >
                     Hire for Mobile
@@ -225,7 +245,7 @@ export default function PricingSection() {
                   </span>
                   <span className='rounded-full bg-green-500/90 px-2 py-0.5 text-[10px] font-semibold text-gray-50'>Best Value</span>
                 </div>
-                <PriceTag amount='$2400' suffix='/mo' />
+                <PriceTag amount={`${currencySymbol}${plans.find((p) => p.id === 'monthly')?.price ?? 2400}`} suffix='/mo' />
                 <ul className='mt-4 space-y-2 text-sm text-purple-900 dark:text-purple-200'>
                   <li className='flex items-center gap-2'>
                     <svg className='h-4 w-4 text-warning' viewBox='0 0 20 20' fill='currentColor'>
@@ -270,7 +290,7 @@ export default function PricingSection() {
                 </ul>
                 <div className='mt-6'>
                   <Link
-                    href={'/contact?service=monthly&rate=2400'}
+                    href={plans.find((p) => p.id === 'monthly')?.ctaHref || '/contact?service=monthly&rate=2400'}
                     className='inline-flex items-center justify-center rounded-full bg-green-500 text-gray-50 font-semibold px-5 py-3 hover:opacity-90 transition'
                   >
                     Hire Monthly
