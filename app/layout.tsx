@@ -102,6 +102,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Meta tags for SEO */}
         <meta content='width=device-width, initial-scale=1' name='viewport' />
         <meta content='#000000' name='theme-color' />
+        <meta name='p:domain_verify' content='a32ebf84bbcff0bbeff53191356c01ea' />
         {/* Twitter conversion tracking base code */}
         <script
           suppressHydrationWarning
