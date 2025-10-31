@@ -16,7 +16,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/dashboard/', '/api/'],
       },
     ],
-    sitemap: `${base}/sitemap.xml`,
+    sitemap: `${base}/sitemap-index.xml`,
     host: base,
   };
 }
