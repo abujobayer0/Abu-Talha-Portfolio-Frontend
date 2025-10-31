@@ -4,9 +4,9 @@ import { User, Code2, GraduationCap, FolderKanban, Briefcase, Newspaper, Home } 
 export const siteConfig = {
   name: 'Abu Talha — Web & Mobile Development',
   ogImage: '/ogImage.jpg',
-  url: 'https://www.apexpropdesign.com/',
+  url: 'https://apexpropdesign.com/',
   description:
-    'Full Stack Developer specializing in Next.js, React, React Native, Node.js, and TypeScript. I build SaaS apps, custom dashboards, conversion-focused landing pages, and modern web/mobile experiences that are fast, robust, and SEO-friendly. Strong focus on clean architecture, performance, and shipping business-impacting features quickly.',
+    'I build SaaS apps, custom dashboards, conversion-focused landing pages, and modern web/mobile experiences that are fast, robust, and SEO-friendly. Strong focus on clean architecture, performance, and shipping business-impacting features quickly.',
   tagline: 'Hire a Next.js/React full-stack developer for SaaS, dashboards, and apps',
   keywords: [
     'Hire full stack developer',
@@ -43,7 +43,7 @@ export const siteConfig = {
     'Headless CMS (Sanity/Strapi) integrations',
   ],
   contact: {
-    email: 'hello@apexpropdesign.com',
+    email: 'zubayer.munna.dev@gmail.com',
     location: 'Remote — Bangladesh (UTC+6) with US/EU overlap',
     availability: 'Open to freelance, contract, and full-time remote roles',
     timezones: ['UTC+6', 'US overlap', 'EU overlap'],
