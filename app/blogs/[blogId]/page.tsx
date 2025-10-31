@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { getSingleBlog } from '@/service/blogService/blogService';
+import { siteConfig } from '@/config/site';
 import { TBlog } from '@/types';
 
 const BlogCard = dynamic(() => import('@/app/(home)/_components/module/blogs/blogCard').then((mod) => mod.BlogCard), { ssr: false });
@@ -69,5 +70,47 @@ export default function BlogDetailsPage(props: any) {
   if (!blog) {
     return <div className='max-w-4xl mx-auto px-4 py-16'>Blog not found or unavailable.</div>;
   }
-  return <BlogCard blog={blog} />;
+  const baseUrl = siteConfig.url.replace(/\/$/, '');
+  const canonical = `${baseUrl}/blogs/${blog._id}`;
+  const description = (blog.content || '').replace(/<[^>]+>/g, '').slice(0, 160);
+  const image = blog.imageUrl || siteConfig.ogImage;
+  const published = (blog as any).createdAt || new Date().toISOString();
+  const modified = (blog as any).updatedAt || published;
+
+  return (
+    <>
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: blog.title,
+            description,
+            image: [image],
+            author: { '@type': 'Person', name: 'Abu Talha Md Jobayer' },
+            publisher: { '@type': 'Organization', name: siteConfig.name, logo: { '@type': 'ImageObject', url: siteConfig.ogImage } },
+            datePublished: published,
+            dateModified: modified,
+            mainEntityOfPage: canonical,
+          }),
+        }}
+      />
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: baseUrl },
+              { '@type': 'ListItem', position: 2, name: 'Blogs', item: `${baseUrl}/blogs` },
+              { '@type': 'ListItem', position: 3, name: blog.title, item: canonical },
+            ],
+          }),
+        }}
+      />
+      <BlogCard blog={blog} />
+    </>
+  );
 }

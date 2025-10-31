@@ -3,8 +3,7 @@ import { User, Code2, GraduationCap, FolderKanban, Briefcase, Newspaper, Home } 
 
 export const siteConfig = {
   name: 'Abu Talha — Web & Mobile Development',
-  ogImage:
-    'https://i.ibb.co.com/wF9NWgf8/Building-websites-at-affordable-prices-is-a-valuable-service-that-caters-to-small-businesses-startup.png',
+  ogImage: '/ogImage.jpg',
   url: 'https://www.apexpropdesign.com/',
   description:
     'Full Stack Developer specializing in Next.js, React, React Native, Node.js, and TypeScript. I build SaaS apps, custom dashboards, conversion-focused landing pages, and modern web/mobile experiences that are fast, robust, and SEO-friendly. Strong focus on clean architecture, performance, and shipping business-impacting features quickly.',

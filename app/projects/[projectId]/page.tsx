@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { getAllProjects, getSingleProject } from '@/service/projectService/projectService';
 import { TProject } from '@/types';
+import { siteConfig } from '@/config/site';
 
 const ProjectDetails = dynamic(() => import('@/app/(home)/_components/module/pojectDetaisl'), { ssr: false });
 
@@ -80,5 +81,46 @@ export default function ProjectDetailsPage(props: any) {
       </div>
     );
   }
-  return <ProjectDetails project={project} projects={projects} currentId={projectId} />;
+  const baseUrl = siteConfig.url.replace(/\/$/, '');
+  const canonical = `${baseUrl}/projects/${projectId}`;
+  const description = (project.description || '').replace(/<[^>]+>/g, '').slice(0, 160);
+  const image = Array.isArray(project.images) && project.images.length > 0 ? project.images[0] : siteConfig.ogImage;
+  const created = (project as any).createdAt || new Date().toISOString();
+  const modified = (project as any).updatedAt || created;
+
+  return (
+    <>
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CreativeWork',
+            name: project.title,
+            description,
+            image: [image],
+            url: canonical,
+            author: { '@type': 'Person', name: 'Abu Talha Md Jobayer' },
+            dateCreated: created,
+            dateModified: modified,
+          }),
+        }}
+      />
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: baseUrl },
+              { '@type': 'ListItem', position: 2, name: 'Projects', item: `${baseUrl}/projects` },
+              { '@type': 'ListItem', position: 3, name: project.title, item: canonical },
+            ],
+          }),
+        }}
+      />
+      <ProjectDetails project={project} projects={projects} currentId={projectId} />
+    </>
+  );
 }
