@@ -163,21 +163,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }),
           }}
         />
-        <script
-          type='application/ld+json'
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'FAQPage',
-              mainEntity: (siteConfig.faq || []).map((f: any) => ({
-                '@type': 'Question',
-                name: f.q,
-                acceptedAnswer: { '@type': 'Answer', text: f.a },
-              })),
-            }),
-          }}
-        />
+        {/* Removed global FAQPage JSON-LD to avoid duplicates */}
         {/* Organization and WebSite JSON-LD */}
         <script
           type='application/ld+json'
